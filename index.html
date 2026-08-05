@@ -127,7 +127,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   text-shadow:0 1px 3px rgba(11,10,22,.95), 0 2px 14px rgba(11,10,22,.85)}
 .lk-desc.unify{grid-column:1;justify-self:end;text-align:right}
 .lk-desc.pulse{grid-column:3;justify-self:start;text-align:left}
-.hero h1{font-size:clamp(2.2rem,6.4vw,5.2rem);font-weight:700;letter-spacing:-.022em;line-height:1.04;text-shadow:0 2px 40px rgba(13,16,48,.6);margin-bottom:clamp(1.5rem,3vw,2.1rem)}
+.hero h1{font-size:clamp(2.2rem,6.4vw,5.2rem);font-weight:700;letter-spacing:-.022em;line-height:1.04;
+  background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 24px rgba(13,16,48,.9)) drop-shadow(0 1px 5px rgba(11,10,22,.75));
+  margin-bottom:clamp(1.5rem,3vw,2.1rem)}
 /* Stacked below 560: two arms side by side need ~396px and the container gives 359.
    Selectors are class-for-class with the desktop rules above, or they lose on
    specificity and the block silently stays in two columns. */
@@ -270,10 +274,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 /* the totality line: one statement on clean ground, above the eclipse. */
 .totality-line{background:#000;text-align:center;padding:clamp(4rem,11vh,7.5rem) 0 clamp(3.4rem,9vh,6rem)}
 .tl{font-size:clamp(2.15rem,6.2vw,4.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.04;
-  width:min(1120px,92%);margin:0 auto;text-wrap:balance;
-  background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 3px 34px rgba(251,205,102,.22))}
+  width:min(1120px,92%);margin:0 auto;text-wrap:balance;color:var(--glacier)}
 
 /* break autopilot — the eclipse photograph, uninterrupted */
 .autopilot{position:relative;min-height:min(100svh,900px);display:flex;align-items:flex-end;justify-content:center;padding:0 0 clamp(3rem,8vh,5.5rem);overflow:hidden;isolation:isolate;text-align:center}
