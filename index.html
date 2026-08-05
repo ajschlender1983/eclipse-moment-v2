@@ -420,14 +420,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .tcar{position:relative;z-index:1}
 .tcar{display:flex;gap:1.1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem .2rem 1rem;scrollbar-width:none}
 .tcar::-webkit-scrollbar{display:none}
-.tcard{flex:0 0 min(78vw,340px);aspect-ratio:3/4;scroll-snap-align:center;border-radius:18px;overflow:hidden;background-size:cover;background-position:top center;border:1px solid rgba(255,138,61,.55);box-shadow:0 0 22px rgba(255,138,61,.22), 0 0 60px rgba(251,205,102,.10), inset 0 0 0 1px rgba(251,205,102,.12);display:flex;align-items:flex-end;position:relative}
-.tcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,16,48,0) 30%,rgba(11,13,32,.62) 55%,rgba(9,10,24,.96) 100%)}
-.tcard-copy{position:relative;z-index:2;padding:1.15rem 1.15rem 1.2rem}
-.tcard blockquote{font-size:1.02rem;font-weight:700;line-height:1.32;text-shadow:0 1px 14px rgba(0,0,0,.8)}
-.tcard p{margin-top:.55rem;font-size:.8rem;line-height:1.42;color:rgba(240,246,249,.78)}
-.tcard figcaption{margin-top:.8rem;padding-top:.7rem;border-top:1px solid rgba(240,246,249,.18)}
-.tcard figcaption b{display:block;font-size:.92rem;color:var(--solar)}
-.tcard figcaption span{display:block;margin-top:.1rem;font-size:.72rem;letter-spacing:.04em;color:var(--dim)}
+/* Matilde's finished cards: art, quote and attribution are one image with
+   transparent rounded corners, so drop-shadow (not box-shadow) follows the alpha */
+.tcard{flex:0 0 min(78vw,340px);scroll-snap-align:center;position:relative;filter:drop-shadow(0 16px 40px rgba(0,0,0,.5))}
+.tcard img{width:100%;height:auto;display:block}
 .tcar-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid rgba(251,205,102,.5);background:rgba(23,23,29,.88);color:var(--solar);font-size:1.1rem;cursor:pointer;transition:background .2s}
 .tcar-btn:hover{background:rgba(251,205,102,.18)}
 .tcar-btn.prev{left:-10px}
@@ -754,48 +750,14 @@ body.bar-visible{padding-bottom:64px}
     <div class="tcar-wrap">
       <button class="tcar-btn prev" aria-label="Previous testimonials" type="button">&#8592;</button>
       <div class="tcar" id="tcar">
-        <figure class="tcard" style="background-image:url('assets/people/vex-king-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;Stillness holds countless answers, clarity, and a deep sense of peace.&rdquo;</blockquote>
-            <p>Each calming vibration gently guides you away from the noise of the world, helping you reconnect with yourself, right here, in the present moment.</p>
-            <figcaption><b>Vex King</b><span>No.1 Sunday Times bestselling author</span></figcaption>
-          </div>
-        </figure>
-        <figure class="tcard" style="background-image:url('assets/people/cory-allen-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;The biggest challenge people face is remembering to be present.&rdquo;</blockquote>
-            <p>As someone who has taught millions of people how to live mindfully, I can tell you the biggest challenge is remembering to be present when you are already distracted.</p>
-            <figcaption><b>Cory Allen</b><span>Mindfulness author &amp; podcaster</span></figcaption>
-          </div>
-        </figure>
-        <figure class="tcard" style="background-image:url('assets/people/alex-elle-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;A grounding reminder to be where my feet are.&rdquo;</blockquote>
-            <p>As a woman, mother, and wife with ADHD, each gentle vibration from this beautifully designed ring serves as a grounding reminder to slow down, breathe, and truly be where my feet are.</p>
-            <figcaption><b>Alex Elle</b><span>NYT bestselling author</span></figcaption>
-          </div>
-        </figure>
-        <figure class="tcard" style="background-image:url('assets/people/kelly-smith-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;Mindfulness isn't found once a day.&rdquo;</blockquote>
-            <p>The magic of mindfulness is found in all of the small moments that are often forgotten or passed by while our minds are elsewhere.</p>
-            <figcaption><b>Kelly Smith</b><span>Yoga &amp; meditation teacher</span></figcaption>
-          </div>
-        </figure>
-        <figure class="tcard" style="background-image:url('assets/people/jon-prince-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;Not only helpful. Essential.&rdquo;</blockquote>
-            <p>It's easy to get distracted in today's modern world. A simple tool that keeps you grounded, present and focused on your intentions is essential.</p>
-            <figcaption><b>Jon Prince</b><span>Self-awareness coach &amp; speaker</span></figcaption>
-          </div>
-        </figure>
-        <figure class="tcard" style="background-image:url('assets/people/katharina-minwegen-card.jpg')">
-          <div class="tcard-copy">
-            <blockquote>&ldquo;The vibration alone instantly brings a sense of calm.&rdquo;</blockquote>
-            <p>I began by taking three deep breaths every time the ring vibrated. Now, the unique vibration alone instantly brings a sense of calm.</p>
-            <figcaption><b>Katharina Minwegen</b><span>Mindfulness expert &amp; life coach</span></figcaption>
-          </div>
-        </figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/vex-king-card.webp" alt="Vex King, bestselling author of Good Vibes, Good Life: Each calming pulse ring vibration gently helps you connect back with yourself." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/cory-allen-card.webp" alt="Cory Allen, author and meditation teacher, host of The Astral Hustle: Pulse is a must-own for anyone who wants to live more connected." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/alex-elle-card.webp" alt="Alex Elle, NYT bestselling author and restorative writing teacher: Pulse has transformed the way I experience presence." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/jon-prince-card.webp" alt="Jon Prince, self-awareness coach and motivational speaker: Pulse reminds me to return back home to my authentic self." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/rimpal-narwan-card.webp" alt="Rimpal Narwan, self-love coach and author of Life Is Beautiful: Pulse reminds me to pause. Stillness arrives, my senses sharpen." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/katharina-minwegen-card.webp" alt="Katharina Minwegen, mindfulness coach and wellbeing guide: It doesn't only calm my mind, it literally lowers my pulse every time it vibrates." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/kelly-smith-card.webp" alt="Kelly Smith, celebrated yoga and meditation teacher: I love to take the Pulse Ring moments to repeat a mantra." width="624" height="880" loading="lazy"></figure>
+        <figure class="tcard"><img decoding="async" src="assets/people/lara-hemeryck-card.webp" alt="Dr. Lara Hemeryck, longevity expert and author of Living Young: Every pulse helps my biology shift into calm, and that calm is what builds longevity." width="624" height="880" loading="lazy"></figure>
       </div>
       <button class="tcar-btn next" aria-label="More testimonials" type="button">&#8594;</button>
     </div>
