@@ -106,6 +106,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* the hand photograph is far brighter than the ring frame it replaced, so the
    scrim keeps a real floor through the band where the lockup sits */
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,23,29,.5) 0%,rgba(23,23,29,.46) 24%,rgba(23,23,29,.44) 44%,rgba(23,23,29,.6) 64%,rgba(23,23,29,.86) 88%,var(--volcanic) 100%);z-index:-1}
+/* the lockup rides in the gap between the corona and the fingertips. The narrow
+   crop puts the eclipse in frame so it moves up there; the wide crop does not,
+   and hoisting it on desktop just jams it into the top edge. */
 .hero-inner{width:min(1080px,92%);margin:clamp(7rem,26vh,15rem) auto auto;text-align:center;padding:0}
 /* the message, the scarcity callout and the button all sit under the ring */
 .hero-foot{position:relative;z-index:3;width:min(1080px,92%);margin:auto auto clamp(1.4rem,4vh,2.6rem);text-align:center}
@@ -495,7 +498,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
    corona crowns the heading while the dark limb keeps that heading on deep navy,
    and the lower arc cradles the card strip. Masked top and bottom so the glow
    dissolves into the neighbouring sections instead of cutting a straight seam. */
-.testis::before{content:"";position:absolute;left:50%;top:50%;width:auto;height:146%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:url('assets/eclipse-mark.svg') center/contain no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%);mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%)}
+.testis::before{content:"";position:absolute;left:44%;top:41%;width:auto;height:176%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:url('assets/eclipse-mark.svg') center/contain no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%);mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%)}
 .testi-head{text-align:center;max-width:34ch;margin:0 auto}
 .testi-head h2{white-space:nowrap}
 .tcar-wrap{position:relative;margin-top:2.6rem}
@@ -1432,7 +1435,10 @@ if(jSec&&wm){
     /* Iceland sits at 44.86% / 13.94% of the map. As the zoom-out settles we slide
        the map so that point lands dead centre of frame, the way the water altar
        sits at the centre of the rings. The orb and the ripples land there too. */
-    const dy=0.3606*h*s;          /* (0.5 - 0.1394) * height  */
+    /* Iceland used to settle dead centre, which left a screen of void above the
+       land. Bias the whole stack up by a fifth of the viewport so the map reads as
+       framed at the top and the closing line has the lower half to itself. */
+    const dy=(0.3606*h - 0.20*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
     /* the closing line no longer hangs off the band bottom, which is now far below
@@ -1575,17 +1581,18 @@ if('IntersectionObserver' in window){
   const hero=document.querySelector('.hero'), img=document.querySelector('.hero-bg'),
         inner=document.querySelector('.hero-inner'), lock=document.querySelector('.lockup.co');
   if(!hero||!img||!inner||!lock)return;
-  const ECLIPSE_BOTTOM=0.265, FINGERTIP_TOP=0.330, POS_Y=0.59;
+  /* BAND_BIAS: 0 sits on the eclipse's lower edge, 1 on the fingertips. The
+     midpoint floated the block too low, so it now rides high in that gap. */
+  const ECLIPSE_BOTTOM=0.265, FINGERTIP_TOP=0.330, POS_Y=0.59, BAND_BIAS=0.18;
   function place(){
     const iw=img.naturalWidth, ih=img.naturalHeight;
     if(!iw||!ih)return;
     const bw=hero.clientWidth, bh=hero.clientHeight;
     const scale=Math.max(bw/iw,bh/ih), rh=ih*scale;
     const offY=(bh-rh)*POS_Y;
-    const target=offY+((ECLIPSE_BOTTOM+FINGERTIP_TOP)/2)*rh;
-    /* centre the logo row itself; the descriptors hang below it */
-    const row=lock.querySelector('.lk-brand'), rowH=row?row.offsetHeight:lock.offsetHeight;
-    const want=target-rowH/2;
+    const target=offY+(ECLIPSE_BOTTOM+BAND_BIAS*(FINGERTIP_TOP-ECLIPSE_BOTTOM))*rh;
+    /* centre the whole block, descriptors included, not just the logo row */
+    const want=target-lock.offsetHeight/2;
     const min=bh*0.045, max=bh*0.55;
     inner.style.marginTop=Math.max(min,Math.min(max,want))+'px';
   }
