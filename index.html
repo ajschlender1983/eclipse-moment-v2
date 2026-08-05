@@ -383,9 +383,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .j-zoom{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity}
 .j-rings{width:150vmin;height:150vmin;flex:none;opacity:0;will-change:opacity}
 .j-photo{position:absolute;left:50%;top:50%;width:46vmin;height:46vmin;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden}
-/* the corona is already centred in the source (measured: fx .499 fy .496),
-   so the mask needs scale only. Any translate here decentres the disc. */
-.j-photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.2);filter:brightness(var(--jb,1));will-change:filter}
+/* Disc sits high in the mask, at -21% of the diameter from centre, per Adam's mark.
+   Solved against the LUNAR DISC (fx .457 fy .468), not the corona centroid:
+   the flare is brighter on one side, so the centroid sits off the disc. */
+.j-photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.5) translate(4.3%,-10.9%);filter:brightness(var(--jb,1));will-change:filter}
 .j-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,247,224,.9),rgba(251,205,102,.55) 55%,rgba(251,205,102,.25) 100%);opacity:0;will-change:opacity}
 /* rings launch from wherever the orb is and run past the edges of the frame.
    The map canvas used to draw these and clipped them at its own bounds. */
