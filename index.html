@@ -99,14 +99,20 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;overflow:hidden}
-.hero video,.hero .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;z-index:-2}
+.hero video,.hero .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 59%;z-index:-2}
 /* The descriptor row lands at ~27% of the viewport, right where the corona rim
    is brightest on the right, so the floor is raised there. The .14 valley at 46%
    keeps the rim reading through the h1, which carries its own shadow anyway. */
 /* the hand photograph is far brighter than the ring frame it replaced, so the
    scrim keeps a real floor through the band where the lockup sits */
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,23,29,.5) 0%,rgba(23,23,29,.46) 24%,rgba(23,23,29,.44) 44%,rgba(23,23,29,.6) 64%,rgba(23,23,29,.86) 88%,var(--volcanic) 100%);z-index:-1}
-.hero-inner{width:min(1080px,92%);margin:auto;text-align:center;padding:2rem 0}
+.hero-inner{width:min(1080px,92%);margin:clamp(1.6rem,6vh,4rem) auto auto;text-align:center;padding:0}
+/* the message, the scarcity callout and the button all sit under the ring */
+.hero-foot{position:relative;z-index:3;width:min(1080px,92%);margin:auto auto clamp(1.4rem,4vh,2.6rem);text-align:center}
+.hero-scarce{display:inline-block;margin:0 0 .85rem;padding:.36rem 1rem;border:1px solid rgba(251,205,102,.5);
+  border-radius:999px;font-size:clamp(.62rem,1.1vw,.72rem);letter-spacing:.16em;text-indent:.16em;
+  text-transform:uppercase;font-weight:700;color:var(--solar);background:rgba(11,10,22,.42);
+  text-shadow:0 1px 10px rgba(0,0,0,.8)}
 .eyebrow{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--glacier);opacity:.85;margin-bottom:1.1rem}
 .lockup{display:flex;align-items:center;justify-content:center;gap:clamp(.8rem,2.4vw,1.3rem);margin-bottom:1.6rem}
 .lk-brand{display:inline-flex;align-items:center;gap:.6rem;font-weight:700;font-size:clamp(1.05rem,2.4vw,1.45rem);letter-spacing:.32em;text-indent:.32em;color:var(--glacier);text-shadow:0 1px 24px rgba(13,16,48,.7)}
@@ -121,6 +127,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .lk-mark{width:clamp(23px,2.5vw,29px);height:clamp(23px,2.5vw,29px);flex:none;filter:none}
 .lockup.co .pulse .lk-mark{filter:drop-shadow(0 0 9px rgba(251,205,102,.45))}
 .lk-logo{height:clamp(1.15rem,2.5vw,1.6rem);width:auto;display:block;filter:drop-shadow(0 1px 14px rgba(13,16,48,.75))}
+/* the emblem carries its own UNIFY at 10% of its height, far too small to read
+   at lockup scale, so it sits as a mark beside the word set in type */
+.lk-emblem{height:clamp(1.5rem,3.2vw,2.05rem);width:auto;flex:none;display:block;filter:drop-shadow(0 1px 10px rgba(0,0,0,.5))}
 .lk-name{font-size:clamp(1.02rem,2.15vw,1.34rem);font-weight:700;letter-spacing:.3em;color:var(--glacier);line-height:1;white-space:nowrap}
 .lockup.co .unify .lk-name{margin-right:-.3em}
 .lk-desc{grid-row:2;font-size:clamp(.72rem,1.02vw,.83rem);font-weight:400;letter-spacing:.015em;line-height:1.3;color:rgba(240,246,249,.78);white-space:nowrap;
@@ -149,11 +158,22 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 }
 .hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
 /* the button sits below the ring rather than beside it, with the code line under */
-.hero-cta{position:relative;z-index:3;margin:0 auto .9rem}
+.hero-cta{margin:0 auto .9rem}
+/* on a phone the photograph is barely cropped, so the ring sits at ~62% height.
+   The foot has to fit under it without reaching the countdown strip. */
+@media (max-width:560px){
+  .hero-inner{margin-top:clamp(1rem,3.5vh,2rem)}
+  .hero-foot{margin-bottom:clamp(.9rem,2.5vh,1.4rem)}
+  .hero-foot h1{font-size:1.98rem;margin-bottom:.72rem}
+  .hero-kicker{margin-bottom:.5rem;font-size:.82rem;letter-spacing:.34em;text-indent:.34em}
+  .hero-scarce{margin-bottom:.62rem;padding:.3rem .8rem}
+  .hero-cta{margin:0 auto .62rem}
+  .hero-cta .cta{padding:.85rem 2.1rem}
+}
 /* the code line hangs off the foot of the hero so it never crowds the ring */
 /* in flow between the centred stack and the strip, so it sits at the foot of the
    image without ever overlapping the countdown bar */
-.hero-code{position:relative;z-index:3;width:min(620px,92%);margin:0 auto clamp(1.6rem,5vh,3.4rem)}
+.hero-code{width:min(620px,92%);margin:0 auto}
 .hero-code .code-terms{flex-basis:100%}
 
 
@@ -560,23 +580,26 @@ body.bar-visible{padding-bottom:64px}
          off the same axis. The × is pinned to row 1 only; centring it across both
          rows turns the block into a table instantly. -->
     <div class="lockup co" role="img" aria-label="Unify and Pulse. Unify: Massive Global Movement. Pulse: World's First Awareness Ring.">
-      <span class="lk-brand unify"><svg class="lk-mark" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="9.5" fill="#0d1030" stroke="#fbcd66" stroke-width="1.6"/></svg><span class="lk-name">UNIFY</span></span>
+      <span class="lk-brand unify"><img class="lk-emblem" src="assets/unify-logo.png" alt="" width="360" height="358" decoding="async"><span class="lk-name">UNIFY</span></span>
       <span class="lk-x" aria-hidden="true">×</span>
       <span class="lk-brand pulse"><img class="lk-logo" src="assets/pulse-logo.svg" alt="Pulse" width="391" height="157" decoding="async"></span>
       <span class="lk-desc unify">Massive Global Movement</span>
       <span class="lk-desc pulse">World&rsquo;s First Awareness Ring</span>
     </div>
+  </div>
+  <div class="hero-foot">
     <p class="hero-kicker lock-a">Break autopilot</p>
     <h1>Be present together.</h1>
+    <p class="hero-scarce">First 200 orders only</p>
+    <div class="cta-row hero-cta">
+      <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
+    </div>
+    <p class="codeline hero-code">
+      <span>Use code</span>
+      <button class="codechip" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button>
+      <span class="code-terms">for $75 off</span>
+    </p>
   </div>
-  <div class="cta-row hero-cta">
-    <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
-  </div>
-  <p class="codeline hero-code">
-    <span>Use code</span>
-    <button class="codechip" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button>
-    <span class="code-terms">for $75 off &middot; first 200 orders only</span>
-  </p>
   <div class="strip">
     <div class="strip-inner" aria-live="off">
       <canvas id="stripdots" aria-hidden="true"></canvas>
@@ -825,7 +848,7 @@ body.bar-visible{padding-bottom:64px}
     <div class="lockup" role="img" aria-label="Pulse and Unify">
       <span class="lk-brand"><img class="lk-logo" src="assets/pulse-logo.svg" alt="Pulse" width="391" height="157" decoding="async"></span>
       <span class="lk-x">×</span>
-      <span class="lk-brand"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="9.5" fill="#0d1030" stroke="#fbcd66" stroke-width="1.6"/></svg>UNIFY</span>
+      <span class="lk-brand"><img class="lk-emblem" src="assets/unify-logo.png" alt="" width="360" height="358" decoding="async">UNIFY</span>
     </div>
     <h2>Let's be present together.</h2>
     <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
