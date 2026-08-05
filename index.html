@@ -6,7 +6,7 @@
 <title>Be Present Together · Unify &amp; Pulse</title>
 <meta name="description" content="The world's first awareness ring. Live transmission August 12. The closing circle August 14. Set one intention and let every pulse return you to it.">
 <meta property="og:title" content="Be Present Together · Unify &amp; Pulse">
-<meta property="og:description" content="Watch the eclipse ceremony live from Iceland. Set one intention. Let every gentle pulse of your ring return you to it. $100 off with VIP code ECLIPSE100VIP.">
+<meta property="og:description" content="Watch the eclipse ceremony live from Iceland. Set one intention. Let every gentle pulse of your ring return you to it. $75 off with VIP code ECLIPSE75VIP.">
 <meta property="og:image" content="https://ajschlender1983.github.io/eclipse-moment-v2/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -115,17 +115,18 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* co-brand lockup with descriptors (hero only; the closing lockup stays a single row) */
 .lockup.co{display:grid;grid-template-columns:1fr auto 1fr;column-gap:clamp(.7rem,1.8vw,1.05rem);row-gap:.55rem;width:min(600px,100%);margin:0 auto 1.55rem;align-items:center}
 .lockup.co .lk-brand{gap:clamp(.5rem,1.1vw,.66rem);font-size:0;letter-spacing:0;text-indent:0}
-.lockup.co .lk-brand.unify{grid-column:1;grid-row:1;justify-self:end}
-.lockup.co .lk-brand.pulse{grid-column:3;grid-row:1;justify-self:start}
+.lockup.co .lk-brand.unify{grid-column:3;grid-row:1;justify-self:start}
+.lockup.co .lk-brand.pulse{grid-column:1;grid-row:1;justify-self:end}
 .lockup.co .lk-x{grid-column:2;grid-row:1;align-self:center;line-height:1;font-size:clamp(.82rem,1.3vw,.98rem);opacity:.68}
 .lk-mark{width:clamp(23px,2.5vw,29px);height:clamp(23px,2.5vw,29px);flex:none;filter:none}
 .lockup.co .pulse .lk-mark{filter:drop-shadow(0 0 9px rgba(251,205,102,.45))}
+.lk-logo{height:clamp(1.15rem,2.5vw,1.6rem);width:auto;display:block;filter:drop-shadow(0 1px 14px rgba(13,16,48,.75))}
 .lk-name{font-size:clamp(1.02rem,2.15vw,1.34rem);font-weight:700;letter-spacing:.3em;color:var(--glacier);line-height:1;white-space:nowrap}
 .lockup.co .unify .lk-name{margin-right:-.3em}
 .lk-desc{grid-row:2;font-size:clamp(.72rem,1.02vw,.83rem);font-weight:400;letter-spacing:.015em;line-height:1.3;color:rgba(240,246,249,.78);white-space:nowrap;
   text-shadow:0 1px 3px rgba(11,10,22,.95), 0 2px 14px rgba(11,10,22,.85)}
-.lk-desc.unify{grid-column:1;justify-self:end;text-align:right}
-.lk-desc.pulse{grid-column:3;justify-self:start;text-align:left}
+.lk-desc.unify{grid-column:3;justify-self:start;text-align:left}
+.lk-desc.pulse{grid-column:1;justify-self:end;text-align:right}
 .hero h1{font-size:clamp(2.2rem,6.4vw,5.2rem);font-weight:700;letter-spacing:-.022em;line-height:1.04;
   background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -138,15 +139,21 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   .lockup.co{grid-template-columns:1fr;width:100%;row-gap:0;margin-bottom:1.15rem}
   .lockup.co .lk-brand.unify,.lockup.co .lk-brand.pulse{grid-column:1;justify-self:center}
   .lockup.co .lk-desc.unify,.lockup.co .lk-desc.pulse{grid-column:1;justify-self:center;text-align:center;margin-top:.45rem}
-  .lockup.co .lk-brand.unify{grid-row:1}
-  .lockup.co .lk-desc.unify{grid-row:2}
+  .lockup.co .lk-brand.pulse{grid-row:1}
+  .lockup.co .lk-desc.pulse{grid-row:2}
   .lockup.co .lk-x{grid-row:3;grid-column:1;justify-self:center;margin:.7rem 0;font-size:1.1rem;opacity:.82}
-  .lockup.co .lk-brand.pulse{grid-row:4}
-  .lockup.co .lk-desc.pulse{grid-row:5}
+  .lockup.co .lk-brand.unify{grid-row:4}
+  .lockup.co .lk-desc.unify{grid-row:5}
   .lockup.co .unify .lk-name{margin-right:0}
   .lockup.co .lk-name{letter-spacing:.28em;padding-left:.28em}
 }
-.hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem;margin-bottom:2.6rem}
+.hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem;margin-bottom:6.2rem}
+/* the code line hangs off the foot of the hero so it never crowds the ring */
+/* in flow between the centred stack and the strip, so it sits at the foot of the
+   image without ever overlapping the countdown bar */
+.hero-code{position:relative;z-index:3;width:min(620px,92%);margin:0 auto clamp(1.6rem,5vh,3.4rem)}
+.hero-code .code-terms{flex-basis:100%}
+@media (max-width:560px){.hero .cta-row{margin-bottom:4.4rem}}
 
 /* countdown strip */
 .strip{position:relative;border-top:1px solid rgba(251,205,102,.22);background:linear-gradient(180deg,rgba(13,16,48,.94),rgba(11,10,22,.97));overflow:hidden}
@@ -289,7 +296,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .autopilot .lead{margin:1.6rem auto 0;text-shadow:0 1px 20px rgba(0,0,0,.9)}
 
 /* the ring — every pulse, on the living eclipse */
-.ring{margin-top:-54vh;position:relative;z-index:6;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, rgba(11,10,22,0) 0, rgba(11,10,22,.75) 14vh, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
+/* This used to sit under the journey and was pulled up over its empty sticky tail.
+   It now follows the offer, so the negative pull and the transparent top would
+   drag it over the cards. Both are gone. */
+.ring{margin-top:0;position:relative;z-index:1;padding:clamp(3rem,8vw,5.5rem) 0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
 .cycle-stage{position:relative;width:min(92vw,520px);margin:0 auto;aspect-ratio:9/16}
 .cycle-vid-bg{position:absolute;inset:0;overflow:hidden;border-radius:18px}
 .cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.5rem,3.4vw,2.2rem);text-shadow:0 2px 30px rgba(0,0,0,.92)}
@@ -465,10 +475,11 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .offer h2{text-align:center}
 .offer .chip-row{display:flex;justify-content:center;margin-top:1.4rem}
 .paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.2rem,3vw,2rem);margin-top:2.4rem;max-width:960px;margin-left:auto;margin-right:auto}
-.path{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:26rem;border-radius:20px;overflow:hidden;border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14);background-size:cover;background-position:center}
+.path{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:31rem;border-radius:20px;overflow:hidden;border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14);background-size:cover;background-position:center}
 .path.gate{background-image:linear-gradient(190deg,rgba(13,16,48,0) 18%,rgba(13,16,48,.62) 48%,rgba(9,11,32,.96) 72%),url('assets/card-festival.jpg')}
 .path[data-path="home"]{background-image:linear-gradient(190deg,rgba(13,16,48,0) 18%,rgba(13,16,48,.62) 48%,rgba(9,11,32,.96) 72%),url('assets/card-home.jpg')}
-.path-body{padding:1.6rem 1.6rem 1.7rem}
+.path-body{position:relative;padding:1.6rem 1.6rem 1.7rem;
+  background:linear-gradient(180deg,rgba(9,11,32,0) 0,rgba(9,11,32,.82) 16%,rgba(9,11,32,.94) 42%,rgba(9,11,32,.97) 100%)}
 .path-badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(0,185,155,.45);background:rgba(0,185,155,.1);border-radius:999px;padding:.3rem .8rem;margin-bottom:.9rem}
 .path-badge.scarce{color:var(--solar);border-color:rgba(251,205,102,.5);background:rgba(251,205,102,.1)}
 .path h3{font-size:clamp(1.35rem,2.6vw,1.7rem);margin-bottom:.9rem;text-shadow:0 1px 14px rgba(13,16,48,.85)}
@@ -549,7 +560,7 @@ body.bar-visible{padding-bottom:64px}
     <div class="lockup co" role="img" aria-label="Unify and Pulse. Unify: Massive Global Movement. Pulse: World's First Awareness Ring.">
       <span class="lk-brand unify"><svg class="lk-mark" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="9.5" fill="#0d1030" stroke="#fbcd66" stroke-width="1.6"/></svg><span class="lk-name">UNIFY</span></span>
       <span class="lk-x" aria-hidden="true">×</span>
-      <span class="lk-brand pulse"><svg class="lk-mark" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="10.5" fill="none" stroke="#fbcd66" stroke-width="1.2" opacity=".4"/><circle cx="13" cy="13" r="7" fill="none" stroke="#fbcd66" stroke-width="2.6"/></svg><span class="lk-name">PULSE</span></span>
+      <span class="lk-brand pulse"><img class="lk-logo" src="assets/pulse-logo.svg" alt="Pulse" width="391" height="157" decoding="async"></span>
       <span class="lk-desc unify">Massive Global Movement</span>
       <span class="lk-desc pulse">World&rsquo;s First Awareness Ring</span>
     </div>
@@ -557,9 +568,13 @@ body.bar-visible{padding-bottom:64px}
     <h1>Be present together.</h1>
     <div class="cta-row">
       <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
-      <p class="codeline"><span>Use code</span><button class="codechip" type="button" data-code="ECLIPSE100VIP" aria-label="Copy the code ECLIPSE100VIP">ECLIPSE100VIP</button><span>for $100 off &middot; first 200 orders</span></p>
     </div>
   </div>
+  <p class="codeline hero-code">
+    <span>Use code</span>
+    <button class="codechip" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button>
+    <span class="code-terms">for $75 off &middot; first 200 orders only</span>
+  </p>
   <div class="strip">
     <div class="strip-inner" aria-live="off">
       <canvas id="stripdots" aria-hidden="true"></canvas>
@@ -687,21 +702,7 @@ body.bar-visible{padding-bottom:64px}
   </div>
 </section>
 
-<section class="ring block">
-  <div class="wrap">
-    <div class="cycle-stage">
-      <div class="cycle-vid-bg" aria-hidden="true">
-        <video class="cycle-video" src="assets/cycle-eclipse.mp4" poster="assets/cycle-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
-      </div>
-      <h2>Every pulse brings you back.</h2>
-      <div class="cycle-cards">
-        <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration finds you.</div></div>
-        <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
-        <div class="beat-card bc-bottom"><div class="beat cb3"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5L9 6.5l4 11 2.5-5.5H21"/></svg><span>Practice</span>Become present, many times a day.</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <section class="integration block" id="closing">
   <div class="wrap">
@@ -725,7 +726,7 @@ body.bar-visible{padding-bottom:64px}
 <section class="offer block" id="offer">
   <div class="wrap">
     <h2>Two ways to get your ring</h2>
-    <div class="chip-row"><p class="codeline"><span>Use code</span><button class="codechip" type="button" data-code="ECLIPSE100VIP" aria-label="Copy the code ECLIPSE100VIP">ECLIPSE100VIP</button><span>for $100 off</span></p></div>
+    <div class="chip-row"><p class="codeline"><span>Use code</span><button class="codechip" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button><span>for $75 off</span></p></div>
     <div class="paths-grid" id="paths">
       <div class="path gate" data-path="gate">
         <div class="path-body">
@@ -734,7 +735,7 @@ body.bar-visible{padding-bottom:64px}
           <ul class="path-list">
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Reserve now, collect at the gate</li>
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Wear it for totality on August 12</li>
-            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>$100 off with your VIP code</li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>$75 off with your VIP code</li>
           </ul>
           <a class="cta buy path-cta" data-reserve href="https://www.pulsemindfulness.com/order">Reserve my ring</a>
           <div class="meter" data-left="184" data-total="2000">
@@ -750,7 +751,7 @@ body.bar-visible{padding-bottom:64px}
           <ul class="path-list">
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 2-day express, a $45 gift</li>
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Order by August 7 to wear it live</li>
-            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>$100 off with your VIP code</li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>$75 off with your VIP code</li>
           </ul>
           <a class="cta buy path-cta" href="https://www.pulsemindfulness.com/order">Ship my ring</a>
           <p class="fine-note">Add code <b>EclipseShipping</b> at checkout for the free 2-day express. It is not applied automatically.</p>
@@ -762,6 +763,20 @@ body.bar-visible{padding-bottom:64px}
       </div>
     </div>
     <!-- TODO (dev owner TBD): wire the two card meters to the live inventory count -->
+  </div>
+</section><section class="ring block">
+  <div class="wrap">
+    <div class="cycle-stage">
+      <div class="cycle-vid-bg" aria-hidden="true">
+        <video class="cycle-video" src="assets/cycle-eclipse.mp4" poster="assets/cycle-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
+      </div>
+      <h2>Every pulse brings you back.</h2>
+      <div class="cycle-cards">
+        <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration finds you.</div></div>
+        <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
+        <div class="beat-card bc-bottom"><div class="beat cb3"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5L9 6.5l4 11 2.5-5.5H21"/></svg><span>Practice</span>Become present, many times a day.</div></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -823,7 +838,7 @@ body.bar-visible{padding-bottom:64px}
 
 <!-- STICKY MOBILE BAR -->
 <div class="sticky-bar" id="sticky">
-  <span class="off"><b>$100 off</b> · VIP code</span>
+  <span class="off"><b>$75 off</b> · VIP code</span>
   <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
 </div>
 
@@ -838,7 +853,7 @@ body.bar-visible{padding-bottom:64px}
       <input type="email" name="email" required placeholder="you@example.com" aria-label="Email address" autocomplete="email">
       <button class="cta" type="submit">Reserve my ring</button>
     </form>
-    <p class="modal-fine">Only 184 rings remaining. Your VIP code is ECLIPSE100VIP.</p>
+    <p class="modal-fine">Only 184 rings remaining. Your VIP code is ECLIPSE75VIP.</p>
     <p class="modal-err" id="reserve-err">That email did not look right. Try again?</p>
     <p class="thanks" id="reserve-thanks">You are on the list. We will hold one for you at the gate and send your VIP code and collection details by email.</p>
   </div>
@@ -1560,7 +1575,7 @@ const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   });
 })();
 
-/* Tap the code to copy it, since nobody wants to retype ECLIPSE100VIP */
+/* Tap the code to copy it, since nobody wants to retype ECLIPSE75VIP */
 document.querySelectorAll('.codechip').forEach(function(b){
   b.addEventListener('click',function(){
     const code=b.dataset.code, done=function(){
