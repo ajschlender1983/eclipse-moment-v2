@@ -95,7 +95,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .modal .thanks{display:none;margin-top:1rem;color:var(--teal);font-size:.95rem}
 .modal-err{display:none;margin-top:.7rem;color:var(--corona);font-size:.85rem}
 .icn{width:22px;height:22px;color:var(--solar);display:block;margin-bottom:.6rem}
-.beat .icn{margin:0 auto .55rem}
+.beat .icn{margin:0 auto .55rem;filter:drop-shadow(0 1px 2px rgba(8,7,18,1)) drop-shadow(0 0 6px rgba(8,7,18,.92))}
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;overflow:hidden}
@@ -331,18 +331,29 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .ring{margin-top:0;position:relative;z-index:1;padding:clamp(3rem,8vw,5.5rem) 0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
 .cycle-stage{position:relative;width:min(92vw,520px);margin:0 auto;aspect-ratio:9/16}
 .cycle-vid-bg{position:absolute;inset:0;overflow:hidden;border-radius:18px}
-.cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.5rem,3.4vw,2.2rem);text-shadow:0 2px 30px rgba(0,0,0,.92)}
+.cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.5rem,3.4vw,2.2rem);text-shadow:0 1px 2px rgba(8,7,18,.94),0 0 12px rgba(8,7,18,.86),0 2px 30px rgba(8,7,18,.92)}
 .cycle-cards{position:absolute;inset:0;z-index:3}
 .beat-card{position:absolute;transform:translate(-50%,-50%);width:min(38%,10.5rem);text-align:center}
+/* The lit water runs to near-white under the beats: sampled across every frame of
+   cycle-eclipse.mp4, the worst luminance behind PRACTICE is .96 and behind PAUSE .83,
+   so gold (L .65) was landing at 1.0:1 there. Each beat gets its own ink lens instead
+   of a panel over the whole frame. The ellipse radii stay at 50% of the box so the
+   gradient reaches full transparency inside its own bounds; push them past 50% and the
+   falloff gets clipped and the scrim reads as a dark rectangle. No backdrop-filter. */
+.beat-card::before{content:"";position:absolute;left:50%;top:50%;
+  width:182%;height:242%;transform:translate(-50%,-50%);z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse 50% 50% at 50% 50%,
+    rgba(8,7,18,.68) 0%, rgba(8,7,18,.64) 40%, rgba(8,7,18,.52) 60%,
+    rgba(8,7,18,.26) 78%, rgba(8,7,18,.06) 92%, rgba(8,7,18,0) 100%)}
 .bc-left{left:21%;top:50%}
 .bc-right{left:79%;top:50%}
 .bc-bottom{left:50%;top:80%;width:min(62%,15rem)}
 
-.beat{font-size:clamp(.82rem,1.5vw,.96rem);text-shadow:0 1px 16px rgba(0,0,0,.95);line-height:1.4;font-weight:500;animation:beatGlow 8s ease-in-out infinite}
+.beat{font-size:clamp(.82rem,1.5vw,.96rem);text-shadow:0 1px 1px rgba(8,7,18,1),0 0 2px rgba(8,7,18,1),0 0 5px rgba(8,7,18,1),0 0 11px rgba(8,7,18,.92),0 0 22px rgba(8,7,18,.75),0 0 40px rgba(8,7,18,.45);line-height:1.4;font-weight:500;animation:beatGlow 8s ease-in-out infinite}
 .cb2{animation-delay:2.667s}
 .cb3{animation-delay:5.333s}
 @keyframes beatGlow{0%,2%{filter:brightness(1.5)}10%,100%{filter:brightness(1)}}
-.beat span{display:block;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--solar);margin-bottom:.35rem;font-weight:700}
+.beat span{display:block;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--solar);margin-bottom:.35rem;font-weight:700;text-shadow:0 1px 1px rgba(8,7,18,1),0 0 2px rgba(8,7,18,1),0 0 4px rgba(8,7,18,1),0 0 9px rgba(8,7,18,.95),0 0 18px rgba(8,7,18,.8),0 0 34px rgba(8,7,18,.5)}
 .cycle-video{position:absolute;left:0;top:-6%;width:100%;height:112%;object-fit:cover;will-change:transform}
 @media (max-width:700px){
   .ring{padding-top:0;padding-bottom:0}
@@ -370,17 +381,17 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .ceremony-shot img{width:100%;display:block}
 .ceremony-shot::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(11,10,22,.62) 0%,rgba(11,10,22,.18) 24%,rgba(11,10,22,0) 46%,rgba(11,10,22,.42) 80%,rgba(11,10,22,.86) 100%)}
-  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.4rem clamp(1.6rem,5vw,3.4rem);
-  text-align:center;padding:0 1rem}
-/* the stats band now sits on the dark section, not on the photograph */
-.ceremony-band{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;
-  gap:.4rem clamp(2rem,6vw,4.2rem);margin-top:clamp(2.2rem,5vw,3.2rem)}
-.cs-stats{display:flex;flex-direction:column;align-items:center;gap:.15rem}
+/* the stats band now sits on the dark section, not on the photograph.
+   grid, not flex-wrap, so the two stats can never drop onto separate rows */
+.ceremony-band{display:grid;grid-template-columns:repeat(2,minmax(0,auto));align-items:start;
+  justify-content:center;column-gap:clamp(1.6rem,6vw,4.2rem);row-gap:0;
+  text-align:center;margin-top:clamp(2.2rem,5vw,3.2rem)}
+.cs-stats{display:flex;flex-direction:column;align-items:center;gap:.15rem;min-width:0}
 .cs-icn{width:clamp(40px,6vw,62px);height:auto;display:block;margin-bottom:.55rem;filter:drop-shadow(0 2px 14px rgba(0,0,0,.95)) drop-shadow(0 0 4px rgba(0,0,0,.7))}
-.cs-stats b{font-size:clamp(1.5rem,3.8vw,2.35rem);font-weight:700;line-height:1;color:var(--solar)}
+.cs-stats b{font-size:clamp(1.5rem,3.8vw,2.35rem);font-weight:700;line-height:1;color:var(--solar);white-space:nowrap}
 .cs-stats>span{font-size:clamp(.55rem,1.05vw,.68rem);letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;
-  color:rgba(240,246,249,.66)}
-.cs-note{flex-basis:100%;margin-top:.9rem;font-size:clamp(.8rem,1.5vw,.95rem);color:rgba(240,246,249,.78)}
+  color:rgba(240,246,249,.66);white-space:nowrap}
+.cs-note{grid-column:1/-1;margin-top:.9rem;font-size:clamp(.8rem,1.5vw,.95rem);color:rgba(240,246,249,.78);text-wrap:balance}
 .cs-date{position:absolute;left:0;right:0;top:clamp(1.6rem,6vw,3.6rem);z-index:2;text-align:center;padding:0 1rem;
   display:flex;flex-direction:column;align-items:center;gap:.1rem;pointer-events:none}
 .cs-date span{font-size:clamp(2.6rem,8.5vw,6.4rem);font-weight:700;letter-spacing:-.03em;line-height:.98;
@@ -479,6 +490,12 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 
 /* testimonials */
 .testis{position:relative;overflow:hidden;z-index:6;margin-top:0;background:radial-gradient(75% 60% at 30% 34%, rgba(73,41,145,.30), transparent 65%), radial-gradient(55% 45% at 82% 62%, rgba(244,39,137,.13), transparent 70%), linear-gradient(180deg, rgba(11,10,22,0) 0, rgba(11,10,22,.72) 14vh, #0b0a16 30vh, var(--volcanic) 100%)}
+/* the supplied eclipse mark, centred behind the circle. Sized off the section's
+   own height (146% => a square ~1.46x as tall as the band) so at every width the
+   corona crowns the heading while the dark limb keeps that heading on deep navy,
+   and the lower arc cradles the card strip. Masked top and bottom so the glow
+   dissolves into the neighbouring sections instead of cutting a straight seam. */
+.testis::before{content:"";position:absolute;left:50%;top:50%;width:auto;height:146%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:url('assets/eclipse-mark.svg') center/contain no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%);mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%)}
 .testi-head{text-align:center;max-width:34ch;margin:0 auto}
 .testi-head h2{white-space:nowrap}
 .tcar-wrap{position:relative;margin-top:2.6rem}
@@ -496,7 +513,9 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .tcar-btn:hover{background:rgba(251,205,102,.18)}
 .tcar-btn.prev{left:-10px}
 .tcar-btn.next{right:-10px}
-@media (max-width:700px){.tcar-btn{display:none}}
+@media (max-width:700px){.tcar-btn{display:none}
+  /* a narrow viewport crops deep into the corona, so ease it back */
+  .testis::before{opacity:.3}}
 
 /* montage — everyone feeling the pulse together */
 .collage-wrap{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5)}
@@ -507,14 +526,29 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 }
 
 /* offer */
-.offer{background:var(--volcanic)}
-.offer h2{text-align:center}
+.offer{position:relative;overflow:hidden;background:#0b0a16}
+.offer::before{content:'';position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(30% 26% at 95% 40%, rgba(255,214,150,.85) 0, rgba(255,160,74,.34) 42%, rgba(255,138,61,0) 74%),
+    radial-gradient(58% 52% at 88% 46%, rgba(255,138,61,.28) 0, rgba(255,138,61,0) 72%),
+    linear-gradient(215deg, rgba(13,16,48,.10) 0, rgba(11,10,22,.58) 55%, rgba(11,10,22,.84) 100%),
+    url('assets/presence-man.jpg') 86% 52%/156% auto no-repeat;
+  background-blend-mode:screen,screen,multiply,normal;
+  filter:contrast(1.36) saturate(1.26) brightness(.82)}
+.offer::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(46% 22% at 50% 15%, rgba(11,10,22,.62) 0, rgba(11,10,22,.24) 62%, rgba(11,10,22,0) 100%),
+    radial-gradient(118% 96% at 58% 52%, rgba(11,10,22,0) 0, rgba(11,10,22,.22) 46%, rgba(11,10,22,.94) 100%),
+    linear-gradient(180deg, rgba(13,16,48,.94) 0, rgba(13,16,48,.30) 11%, rgba(11,10,22,.08) 34%, rgba(11,10,22,.58) 82%, rgba(11,10,22,.97) 100%)}
+.offer .wrap{position:relative;z-index:2}
+.offer h2{text-align:center;text-shadow:0 2px 26px rgba(11,10,22,.95),0 1px 5px rgba(11,10,22,.85)}
+.offer .codeline{text-shadow:0 1px 14px rgba(11,10,22,.9)}
 .offer .chip-row{display:flex;justify-content:center;margin-top:1.4rem}
 .paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.2rem,3vw,2rem);margin-top:2.4rem;max-width:960px;margin-left:auto;margin-right:auto}
 /* photograph on top, copy below it on solid ground. Both rings sit dead centre
    of their frames, so an overlaid copy floor covered exactly the thing to show. */
 .path{position:relative;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;
-  border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14);background:#0d1030}
+  border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14),0 30px 64px rgba(11,10,22,.62);background:#0d1030}
 .path-media{flex:none;height:clamp(168px,26vw,214px);background-size:cover;background-position:center 50%;
   border-bottom:1px solid rgba(255,138,61,.18)}
 .path.gate .path-media{background-image:url('assets/card-festival.jpg')}
@@ -584,6 +618,7 @@ body.bar-visible{padding-bottom:64px}
 .sticky-bar .cta{padding:.7rem 1.5rem;font-size:.95rem;box-shadow:none}
 
 @media (max-width:760px){
+  .offer::before{background-size:auto,auto,auto,cover;background-position:0 0,0 0,0 0,100% 46%}
   .broadcast .wrap,.integration .wrap,.paths-grid,.community .cards,.closing-grid{grid-template-columns:1fr}
   .integration .frame{order:-1}
   .hero-inner{padding-bottom:1rem}
@@ -826,7 +861,7 @@ body.bar-visible{padding-bottom:64px}
       <div class="cycle-vid-bg" aria-hidden="true">
         <video class="cycle-video" src="assets/cycle-eclipse.mp4" poster="assets/cycle-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
       </div>
-      <h2>Every pulse brings you back.</h2>
+      <h2>One pulse brings you back.</h2>
       <div class="cycle-cards">
         <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration finds you.</div></div>
         <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
