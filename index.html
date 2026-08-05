@@ -174,8 +174,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
    image without ever overlapping the countdown bar */
 /* understated, the same treatment the bar uses: amount over code, no chrome */
 .hero-code{display:flex;flex-direction:column;align-items:center;gap:.14rem;width:min(620px,92%);margin:0 auto;line-height:1.2}
-.hero-code b{font-size:clamp(.95rem,1.9vw,1.08rem);font-weight:700;color:var(--solar);
-  text-shadow:0 1px 14px rgba(0,0,0,.8)}
+.hero-buy{padding-left:clamp(2.1rem,7vw,3.4rem);padding-right:clamp(2.1rem,7vw,3.4rem);white-space:nowrap}
+.hero-buy .slash{opacity:.4;margin:0 .2em;font-weight:400}
 .codeplain{font:inherit;font-size:clamp(.68rem,1.3vw,.76rem);font-weight:700;letter-spacing:.14em;
   background:none;border:0;padding:0;cursor:pointer;color:rgba(240,246,249,.72);
   text-shadow:0 1px 12px rgba(0,0,0,.85);transition:color .2s ease}
@@ -511,11 +511,15 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .offer h2{text-align:center}
 .offer .chip-row{display:flex;justify-content:center;margin-top:1.4rem}
 .paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.2rem,3vw,2rem);margin-top:2.4rem;max-width:960px;margin-left:auto;margin-right:auto}
-.path{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:31rem;border-radius:20px;overflow:hidden;border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14);background-size:cover;background-position:center}
-.path.gate{background-image:linear-gradient(190deg,rgba(13,16,48,0) 18%,rgba(13,16,48,.62) 48%,rgba(9,11,32,.96) 72%),url('assets/card-festival.jpg')}
-.path[data-path="home"]{background-image:linear-gradient(190deg,rgba(13,16,48,0) 18%,rgba(13,16,48,.62) 48%,rgba(9,11,32,.96) 72%),url('assets/card-home.jpg')}
-.path-body{position:relative;padding:1.6rem 1.6rem 1.7rem;
-  background:linear-gradient(180deg,rgba(9,11,32,0) 0,rgba(9,11,32,.82) 16%,rgba(9,11,32,.94) 42%,rgba(9,11,32,.97) 100%)}
+/* photograph on top, copy below it on solid ground. Both rings sit dead centre
+   of their frames, so an overlaid copy floor covered exactly the thing to show. */
+.path{position:relative;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;
+  border:1px solid rgba(255,138,61,.42);box-shadow:0 0 24px rgba(255,138,61,.14);background:#0d1030}
+.path-media{flex:none;height:clamp(168px,26vw,214px);background-size:cover;background-position:center 50%;
+  border-bottom:1px solid rgba(255,138,61,.18)}
+.path.gate .path-media{background-image:url('assets/card-festival.jpg')}
+.path[data-path="home"] .path-media{background-image:url('assets/card-home.jpg')}
+.path-body{position:relative;flex:1;display:flex;flex-direction:column;padding:1.35rem 1.6rem 1.6rem;background:#0d1030}
 .path-badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(0,185,155,.45);background:rgba(0,185,155,.1);border-radius:999px;padding:.3rem .8rem;margin-bottom:.9rem}
 .path-badge.scarce{color:var(--solar);border-color:rgba(251,205,102,.5);background:rgba(251,205,102,.1)}
 .path h3{font-size:clamp(1.35rem,2.6vw,1.7rem);margin-bottom:.9rem;text-shadow:0 1px 14px rgba(13,16,48,.85)}
@@ -607,10 +611,9 @@ body.bar-visible{padding-bottom:64px}
     <p class="hero-kicker lock-a">Break autopilot</p>
     <h1>Be present together.</h1>
     <div class="cta-row hero-cta">
-      <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
+      <a class="cta buy hero-buy" href="https://www.pulsemindfulness.com/order">Get my ring <span class="slash">/</span> $75 off</a>
     </div>
     <p class="hero-code">
-      <b>$75 off</b>
       <button class="codeplain" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button>
     </p>
   </div>
@@ -780,6 +783,7 @@ body.bar-visible{padding-bottom:64px}
     <div class="chip-row"><p class="codeline"><span>Use code</span><button class="codechip" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button><span>for $75 off</span></p></div>
     <div class="paths-grid" id="paths">
       <div class="path gate" data-path="gate">
+        <div class="path-media" aria-hidden="true"></div>
         <div class="path-body">
           <span class="path-badge scarce">Only 200 on site</span>
           <h3>Pulse in person</h3>
@@ -796,6 +800,7 @@ body.bar-visible{padding-bottom:64px}
         </div>
       </div>
       <div class="path" data-path="home">
+        <div class="path-media" aria-hidden="true"></div>
         <div class="path-body">
           <span class="path-badge">Free 2-day delivery</span>
           <h3>Pulse at home</h3>
@@ -1543,7 +1548,9 @@ if('IntersectionObserver' in window){
     const scale=Math.max(bw/iw,bh/ih), rh=ih*scale;
     const offY=(bh-rh)*POS_Y;
     const target=offY+((ECLIPSE_BOTTOM+FINGERTIP_TOP)/2)*rh;
-    const want=target-lock.offsetHeight/2;
+    /* centre the logo row itself; the descriptors hang below it */
+    const row=lock.querySelector('.lk-brand'), rowH=row?row.offsetHeight:lock.offsetHeight;
+    const want=target-rowH/2;
     const min=bh*0.045, max=bh*0.55;
     inner.style.marginTop=Math.max(min,Math.min(max,want))+'px';
   }
