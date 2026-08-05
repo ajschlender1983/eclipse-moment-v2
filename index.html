@@ -147,13 +147,15 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   .lockup.co .unify .lk-name{margin-right:0}
   .lockup.co .lk-name{letter-spacing:.28em;padding-left:.28em}
 }
-.hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem;margin-bottom:6.2rem}
+.hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
+/* the button sits below the ring rather than beside it, with the code line under */
+.hero-cta{position:relative;z-index:3;margin:0 auto .9rem}
 /* the code line hangs off the foot of the hero so it never crowds the ring */
 /* in flow between the centred stack and the strip, so it sits at the foot of the
    image without ever overlapping the countdown bar */
 .hero-code{position:relative;z-index:3;width:min(620px,92%);margin:0 auto clamp(1.6rem,5vh,3.4rem)}
 .hero-code .code-terms{flex-basis:100%}
-@media (max-width:560px){.hero .cta-row{margin-bottom:4.4rem}}
+
 
 /* countdown strip */
 .strip{position:relative;border-top:1px solid rgba(251,205,102,.22);background:linear-gradient(180deg,rgba(13,16,48,.94),rgba(11,10,22,.97));overflow:hidden}
@@ -566,9 +568,9 @@ body.bar-visible{padding-bottom:64px}
     </div>
     <p class="hero-kicker lock-a">Break autopilot</p>
     <h1>Be present together.</h1>
-    <div class="cta-row">
-      <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
-    </div>
+  </div>
+  <div class="cta-row hero-cta">
+    <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
   </div>
   <p class="codeline hero-code">
     <span>Use code</span>
