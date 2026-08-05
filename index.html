@@ -106,7 +106,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* the hand photograph is far brighter than the ring frame it replaced, so the
    scrim keeps a real floor through the band where the lockup sits */
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,23,29,.5) 0%,rgba(23,23,29,.46) 24%,rgba(23,23,29,.44) 44%,rgba(23,23,29,.6) 64%,rgba(23,23,29,.86) 88%,var(--volcanic) 100%);z-index:-1}
-.hero-inner{width:min(1080px,92%);margin:clamp(1.6rem,6vh,4rem) auto auto;text-align:center;padding:0}
+.hero-inner{width:min(1080px,92%);margin:clamp(7rem,26vh,15rem) auto auto;text-align:center;padding:0}
 /* the message, the scarcity callout and the button all sit under the ring */
 .hero-foot{position:relative;z-index:3;width:min(1080px,92%);margin:auto auto clamp(1.4rem,4vh,2.6rem);text-align:center}
 .hero-scarce{display:inline-block;margin:0 0 .85rem;padding:.36rem 1rem;border:1px solid rgba(251,205,102,.5);
@@ -145,15 +145,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
    Selectors are class-for-class with the desktop rules above, or they lose on
    specificity and the block silently stays in two columns. */
 @media (max-width:560px){
-  .lockup.co{grid-template-columns:1fr;width:100%;row-gap:0;margin-bottom:1.15rem}
-  .lockup.co .lk-brand.unify,.lockup.co .lk-brand.pulse{grid-column:1;justify-self:center}
-  .lockup.co .lk-desc.unify,.lockup.co .lk-desc.pulse{grid-column:1;justify-self:center;text-align:center;margin-top:.45rem}
-  .lockup.co .lk-brand.pulse{grid-row:1}
-  .lockup.co .lk-desc.pulse{grid-row:2}
-  .lockup.co .lk-x{grid-row:3;grid-column:1;justify-self:center;margin:1.05rem 0;font-size:1.15rem;opacity:.82;line-height:1}
-  .lockup.co .lk-brand.unify{grid-row:4}
-  .lockup.co .lk-desc.unify{grid-row:5}
-  .lockup.co .unify .lk-name{margin-right:0}
+  /* the two arms stay left and right at every width; the Pulse logotype is
+     compact enough that the pair fits a 390 phone without stacking */
+  .lockup.co{column-gap:clamp(.5rem,3vw,1.05rem);row-gap:.4rem;margin-bottom:1.05rem}
+  .lk-logo{height:.98rem}
+  .lk-emblem{height:1.25rem}
+  .lk-name{font-size:.86rem;letter-spacing:.2em;text-indent:.2em}
+  .lk-desc{font-size:.6rem;line-height:1.25;white-space:normal}
+  .lockup.co .lk-x{font-size:.78rem}
   .lockup.co .lk-name{letter-spacing:.28em;padding-left:.28em}
 }
 .hero .cta-row{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
@@ -162,7 +161,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* on a phone the photograph is barely cropped, so the ring sits at ~62% height.
    The foot has to fit under it without reaching the countdown strip. */
 @media (max-width:560px){
-  .hero-inner{margin-top:clamp(1rem,3.5vh,2rem)}
+  .hero-inner{margin-top:clamp(6rem,23vh,11rem)}
   .hero-foot{margin-bottom:clamp(.9rem,2.5vh,1.4rem)}
   .hero-foot h1{font-size:1.98rem;margin-bottom:.72rem}
   .hero-kicker{margin-bottom:.5rem;font-size:.82rem;letter-spacing:.34em;text-indent:.34em}
@@ -363,17 +362,23 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .ceremony-shot img{width:100%;display:block}
 .ceremony-shot::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(11,10,22,.62) 0%,rgba(11,10,22,.18) 24%,rgba(11,10,22,0) 46%,rgba(11,10,22,.42) 80%,rgba(11,10,22,.86) 100%)}
-.ceremony-shot figcaption{position:absolute;left:0;right:0;top:clamp(1.2rem,4vw,2.6rem);z-index:2;
   display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.4rem clamp(1.6rem,5vw,3.4rem);
   text-align:center;padding:0 1rem}
+/* the stats band now sits on the dark section, not on the photograph */
+.ceremony-band{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;
+  gap:.4rem clamp(2rem,6vw,4.2rem);margin-top:clamp(2.2rem,5vw,3.2rem)}
 .cs-stats{display:flex;flex-direction:column;align-items:center;gap:.15rem}
 .cs-icn{width:clamp(40px,6vw,62px);height:auto;display:block;margin-bottom:.55rem;filter:drop-shadow(0 2px 14px rgba(0,0,0,.95)) drop-shadow(0 0 4px rgba(0,0,0,.7))}
-.cs-stats b{font-size:clamp(1.3rem,3.4vw,2.1rem);font-weight:700;line-height:1;color:var(--solar);
-  text-shadow:0 2px 20px rgba(0,0,0,.9)}
-.cs-stats>span{font-size:clamp(.52rem,1vw,.64rem);letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;
-  color:rgba(240,246,249,.72);text-shadow:0 1px 12px rgba(0,0,0,.9)}
-.cs-note{flex-basis:100%;margin-top:.5rem;font-size:clamp(.74rem,1.4vw,.9rem);color:rgba(240,246,249,.8);
-  text-shadow:0 1px 16px rgba(0,0,0,.95)}
+.cs-stats b{font-size:clamp(1.5rem,3.8vw,2.35rem);font-weight:700;line-height:1;color:var(--solar)}
+.cs-stats>span{font-size:clamp(.55rem,1.05vw,.68rem);letter-spacing:.2em;text-indent:.2em;text-transform:uppercase;
+  color:rgba(240,246,249,.66)}
+.cs-note{flex-basis:100%;margin-top:.9rem;font-size:clamp(.8rem,1.5vw,.95rem);color:rgba(240,246,249,.78)}
+.cs-date{position:absolute;left:0;right:0;top:clamp(1.6rem,6vw,3.6rem);z-index:2;text-align:center;padding:0 1rem;
+  display:flex;flex-direction:column;align-items:center;gap:.1rem;pointer-events:none}
+.cs-date span{font-size:clamp(2.6rem,8.5vw,6.4rem);font-weight:700;letter-spacing:-.03em;line-height:.98;
+  color:var(--glacier);text-shadow:0 3px 40px rgba(0,0,0,.9),0 1px 10px rgba(0,0,0,.8)}
+.cs-date em{font-style:normal;font-size:clamp(.72rem,1.6vw,1rem);font-weight:700;letter-spacing:.42em;
+  text-indent:.42em;color:rgba(240,246,249,.82);text-shadow:0 2px 18px rgba(0,0,0,.95)}
 .cs-invite{position:absolute;left:0;right:0;bottom:clamp(1.4rem,5vw,3.2rem);z-index:2;text-align:center;padding:0 1rem;
   font-size:clamp(1.25rem,3.4vw,2.3rem);font-weight:700;letter-spacing:-.02em;
   background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
@@ -633,10 +638,7 @@ body.bar-visible{padding-bottom:64px}
     <p class="lead">The moon covers the sun over the North Atlantic. Day turns to dusk, the birds go quiet, and everyone standing in that shadow stops at the same second.</p>
     <p class="lead">In Iceland, 3,333 people sit in fifteen rings around a water altar. Forty-five minutes of ceremonial music builds, and then it stops. Nobody speaks.</p>
     <p class="lead">You do not have to be in the meadow for that to reach you. Wherever you are, you can stop when they stop. That is the whole practice, and it is the one your ring hands back to you every day after: one pulse, one pause, one breath into your own life.</p>
-  </div>
-  <figure class="ceremony-shot">
-    <img decoding="async" src="assets/ceremony-circle.jpg" alt="Aerial view of fifteen rings of people seated around a flowered water altar on an Icelandic lava field, a festival campground of tents and domes encircling them, a glacier on the horizon" width="2000" height="1116" loading="lazy">
-    <figcaption>
+    <div class="ceremony-band">
       <span class="cs-stats">
         <svg class="cs-icn" viewBox="0 0 120 120" aria-hidden="true">
           <g fill="#fbcd66"><circle cx="60" cy="60" r="3.6"/></g>
@@ -651,7 +653,11 @@ body.bar-visible{padding-bottom:64px}
         </svg>
         <b>Two</b><span>intentions</span></span>
       <span class="cs-note">One for yourself. One for the planet.</span>
-    </figcaption>
+    </div>
+  </div>
+  <figure class="ceremony-shot">
+    <img decoding="async" src="assets/ceremony-circle.jpg" alt="Aerial view of fifteen rings of people seated around a flowered water altar on an Icelandic lava field, a festival campground of tents and domes encircling them, a glacier on the horizon" width="2000" height="1116" loading="lazy">
+    <p class="cs-date"><span>August 12</span><em>2026</em></p>
     <p class="cs-invite">Join us, wherever you are.</p>
   </figure>
 </section>
