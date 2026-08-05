@@ -1527,6 +1527,31 @@ if('IntersectionObserver' in window){
   new IntersectionObserver(e=>{finalSeen=e[0].isIntersecting;update()},{threshold:.2}).observe(offer);
 }
 
+/* Sit the lockup in the gap between the corona and the fingertips.
+   Both are fixed points in the photograph (0.265 and 0.330 of its height), but
+   object-fit:cover re-crops per viewport, so where they land has to be computed.
+   On wide screens the eclipse crops out entirely and the clamp takes over. */
+(function(){
+  const hero=document.querySelector('.hero'), img=document.querySelector('.hero-bg'),
+        inner=document.querySelector('.hero-inner'), lock=document.querySelector('.lockup.co');
+  if(!hero||!img||!inner||!lock)return;
+  const ECLIPSE_BOTTOM=0.265, FINGERTIP_TOP=0.330, POS_Y=0.59;
+  function place(){
+    const iw=img.naturalWidth, ih=img.naturalHeight;
+    if(!iw||!ih)return;
+    const bw=hero.clientWidth, bh=hero.clientHeight;
+    const scale=Math.max(bw/iw,bh/ih), rh=ih*scale;
+    const offY=(bh-rh)*POS_Y;
+    const target=offY+((ECLIPSE_BOTTOM+FINGERTIP_TOP)/2)*rh;
+    const want=target-lock.offsetHeight/2;
+    const min=bh*0.045, max=bh*0.55;
+    inner.style.marginTop=Math.max(min,Math.min(max,want))+'px';
+  }
+  if(img.complete)place(); else img.addEventListener('load',place);
+  addEventListener('resize',place);
+  addEventListener('orientationchange',place);
+})();
+
 /* Cycle video — parallax drift + pause offscreen */
 const cyv=document.querySelector('.cycle-video');
 if(cyv){
