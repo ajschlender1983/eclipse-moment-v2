@@ -685,7 +685,7 @@ body.bar-visible{padding-bottom:64px}
 
 <!-- THE TOTALITY LINE -->
 <section class="totality-line">
-  <h2 class="tl">Two minutes of total<br>silence.</h2>
+  <h2 class="tl">Two minutes of total<br>presence.</h2>
 </section>
 
 <!-- FOUNDER INVITATION (placeholder thumbnail — video pending) -->
@@ -1510,12 +1510,14 @@ if(jSec&&wm){
       /* the shrink starts at the pivot, the travel to Iceland lags it, so the
          orb reads as scaling into the centre of frame before it goes anywhere */
       const t=easeIO(clamp01((p-.7)/.25));
-      const tv=easeIO(clamp01((p-.80)/.155));
+      /* land it before it fades. Travel used to finish at .955, by which point
+         the orb was already at 10% opacity, so it never visibly arrived. */
+      const tv=easeIO(clamp01((p-.78)/.12));
       scale=lerp(1,.055,t);
       const mr=wm.getBoundingClientRect();
       const icx=mr.left+.4486*mr.width, icy=mr.top+.1394*mr.height;
       tx=lerp(0,icx-innerWidth/2,tv); ty=lerp(0,icy-innerHeight/2,tv);
-      zo=1-clamp01((p-.91)/.05);
+      zo=1-clamp01((p-.94)/.05);
     }
     jZoom.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+scale.toFixed(4)+')';
     jZoom.style.opacity=zo.toFixed(3);
