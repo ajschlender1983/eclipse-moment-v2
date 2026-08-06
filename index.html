@@ -419,6 +419,12 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
   background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 2px 22px rgba(251,205,102,.18))}
+/* knocked out of the corona: the mark's own palette, ordered so the bright
+   band falls across the glyphs. A flat crop of the SVG would put the near-black
+   disc centre through the middle of the word on a dark section. */
+.tth{background:linear-gradient(100deg,#fff7e0 0%,#facd66 22%,#ee7717 48%,#fc2b00 64%,#facd66 84%,#fff7e0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 26px rgba(251,205,102,.20))}
 .cc-time{margin-top:.6rem;font-size:.74rem;letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;
   color:rgba(240,246,249,.6);font-weight:500}
 .integration p{margin-top:1.1rem}
@@ -494,7 +500,8 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 /* silence — the wordmark over the eclipse */
 
 /* the moment — planetary alignment, for whoever is watching */
-.moment{position:relative;overflow:hidden;background:var(--volcanic);padding:clamp(4.5rem,10vw,8rem) 0}
+/* no bottom padding: the ceremony photograph runs full bleed into the journey */
+.moment{position:relative;overflow:hidden;background:var(--volcanic);padding:clamp(4.5rem,10vw,8rem) 0 0}
 .moment .wrap{position:relative;z-index:2}
 .moment .lead.accent{color:var(--solar);font-size:clamp(1.35rem,2.8vw,1.9rem);font-weight:500;margin-top:1.6rem}
 /* the copy sits over a photograph now, so the type carries its own shadow */
@@ -738,7 +745,6 @@ body.bar-visible{padding-bottom:64px}
     <p class="lead">The moon covers the sun over the North Atlantic. Day turns to dusk, the birds go quiet, and everyone standing in that shadow stops at the same second.</p>
     <p class="lead">In Iceland, 3,333 people sit in fifteen rings around a water altar. The music builds, then perfect silence.</p>
     <p class="lead">Wherever you are, you can stop when they stop. We hold this moment together.</p>
-    <p class="lead">The Pulse ring helps you return to that feeling every day after.</p>
     <div class="ceremony-band">
       <span class="cs-stats">
         <svg class="cs-icn" viewBox="0 0 120 120" aria-hidden="true">
@@ -858,10 +864,11 @@ body.bar-visible{padding-bottom:64px}
         <span class="cc-date">Friday, August 14</span>
         <span class="cc-time">19:00 Iceland</span>
       </p>
-      <h2>Take Totality Home.</h2>
+      <h2 class="tth">Take Totality Home.</h2>
       <p class="ceremony-tag">One intention for yourself. One for the planet.</p>
       <p class="lead">You choose them in the silence. For two days we practice living into them, then the festival closes the circle in the Garden.</p>
       <p class="lead">Most intentions fade by the time you land. Yours comes home on your finger.</p>
+      <p class="lead">The Pulse ring helps you return to that feeling every day after.</p>
 
 
       <a class="cta buy" href="https://www.pulsemindfulness.com/order">Get my ring</a>
