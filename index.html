@@ -249,18 +249,19 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .broadcast{background:linear-gradient(180deg,var(--volcanic),var(--midnight));position:relative;overflow:hidden}
 /* The Iceland Eclipse mark carries this section, with the photograph seated in
    its dark disc. The mark's disc is 17.3% of its own width (measured off
-   eclipse-mark.svg), so its dark disc is .346 of the mark across. --disc is a
-   DIAMETER, so the frame is disc / .346 = disc * 2.89, not / .173.
+   eclipse-mark.svg the dark disc is the r=92.14 circle of a 331.91 box, i.e.
+   .554 of the mark across, confirmed by measuring the rendered page). --disc is
+   the face DIAMETER, so the frame is disc / .554 = disc * 1.805.
    Face circle centred on (55%, 40%) of the source, which holds the head, both
    hands and the ring. */
 /* --disc and --mtop live on the section so the copy can offset itself off the
    same numbers the medallion is drawn from, instead of guessing a padding. */
 #moment{--disc:clamp(158px,24vw,300px);--mtop:clamp(170px,26vw,300px)}
 .moment-eclipse{position:absolute;left:50%;top:var(--mtop);
-  width:calc(var(--disc)*2.89);height:calc(var(--disc)*2.89);transform:translate(-50%,-50%);
+  width:calc(var(--disc)*1.805);height:calc(var(--disc)*1.805);transform:translate(-50%,-50%);
   z-index:0;pointer-events:none;
   background:url('assets/eclipse-mark.svg') center/contain no-repeat}
-.moment-face{position:absolute;left:50.9%;top:49.4%;width:var(--disc);height:var(--disc);
+.moment-face{position:absolute;left:51.14%;top:49.76%;width:var(--disc);height:var(--disc);
   transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;object-position:55% 40%;
   filter:brightness(.92) contrast(1.06)}
 @media (max-width:760px){#moment{--disc:clamp(132px,40vw,200px);--mtop:clamp(140px,34vw,210px)}}
