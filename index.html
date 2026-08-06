@@ -436,11 +436,19 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 /* the one serif on the page, so the closing circle reads as its own occasion.
    Two bright stops instead of six: a six-stop ramp muddies inside serif strokes,
    which are thin where a sans is solid. */
-.tth{font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-style:italic;
-  font-weight:400;font-size:clamp(2.9rem,7.6vw,5.4rem);letter-spacing:-.012em;line-height:1.02;
+.tth{position:relative;font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-style:italic;
+  font-weight:400;font-size:clamp(2.9rem,7.6vw,6.2rem);letter-spacing:-.012em;line-height:1.02;
+  /* the descender of the italic y paints below the box; without this padding the
+     clipped gradient never reaches it and the tail goes invisible */
+  padding-bottom:.14em;margin-bottom:-.14em;
   background:linear-gradient(100deg,#fff7e0 0%,#ffd98a 46%,#facd66 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 2px 30px rgba(251,205,102,.34)) drop-shadow(0 1px 3px rgba(8,7,18,.8))}
+.tth::before{content:"";position:absolute;inset:-30% -8%;z-index:-1;pointer-events:none;
+  background:radial-gradient(48% 58% at 50% 54%,rgba(251,205,102,.30),rgba(255,138,61,.10) 58%,transparent 75%);
+  animation:tthGlow 5.5s ease-in-out infinite}
+@keyframes tthGlow{0%,100%{opacity:.35}50%{opacity:.9}}
+@media (prefers-reduced-motion: reduce){.tth::before{animation:none;opacity:.5}}
 .cc-badge{margin:.85rem 0 0;align-self:center}
 /* the ring on volcanic rock sits behind the whole section; the scrim stays heavy
    at the top so the serif headline reads, and eases where the ring glows through */
@@ -652,6 +660,11 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .path-badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(0,185,155,.45);background:rgba(0,185,155,.1);border-radius:999px;padding:.3rem .8rem;margin-bottom:.9rem}
 .path-badge.scarce{color:var(--solar);border-color:rgba(251,205,102,.5);background:rgba(251,205,102,.1)}
 .path h3{font-size:clamp(1.35rem,2.6vw,1.7rem);margin-bottom:.9rem;text-shadow:0 1px 14px rgba(13,16,48,.85)}
+.path-title{display:flex;align-items:baseline;gap:.42em}
+/* the wordmark's p-descender lives inside its viewBox, so the img hangs below
+   the baseline by that same fraction to keep the x-height on the line */
+.path-title .path-logo{height:1.12em;width:auto;align-self:center;transform:translateY(.07em)}
+.path-title em{font-style:italic;font-weight:500;letter-spacing:.01em}
 .path-list{list-style:none;margin:0 0 1.4rem;display:flex;flex-direction:column;gap:.5rem}
 .path-list li{display:flex;align-items:flex-start;gap:.6rem;font-size:.95rem;line-height:1.35;color:rgba(240,246,249,.92)}
 .tick{width:16px;height:16px;flex:none;margin-top:.18rem;color:var(--teal)}
@@ -925,7 +938,7 @@ body.bar-visible{padding-bottom:64px}
         <div class="path-media" aria-hidden="true"></div>
         <div class="path-body">
           <span class="path-badge scarce">Only 200 on site</span>
-          <h3>Pulse in person</h3>
+          <h3 class="path-title"><img class="path-logo" src="assets/pulse-logo-solid.svg" alt="Pulse" width="391" height="157" decoding="async"><em>in person</em></h3>
           <ul class="path-list">
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Reserve now, collect at the gate</li>
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Wear it for totality on August 12</li>
@@ -942,7 +955,7 @@ body.bar-visible{padding-bottom:64px}
         <div class="path-media" aria-hidden="true"></div>
         <div class="path-body">
           <span class="path-badge">Free 2-day delivery</span>
-          <h3>Pulse at home</h3>
+          <h3 class="path-title"><img class="path-logo" src="assets/pulse-logo-solid.svg" alt="Pulse" width="391" height="157" decoding="async"><em>at home</em></h3>
           <ul class="path-list">
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Free 2-day express, a $45 gift</li>
             <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Order by August 7 to wear it live</li>
