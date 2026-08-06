@@ -100,6 +100,20 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;overflow:hidden}
 .hero video,.hero .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 59%;z-index:-2}
+/* A ripple leaving the ring in the photograph. Anchored by JS, because
+   object-fit:cover re-crops per viewport and the ring moves with it. Sized off
+   the ring's own width so it stays proportionate. Sits above the image and below
+   the scrim, which is what keeps it subtle. */
+.hero-pulse{position:absolute;left:50%;top:50%;width:0;height:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1s ease}
+.hero-pulse.on{opacity:1}
+.hero-pulse i{position:absolute;left:0;top:0;width:var(--rw,120px);height:var(--rw,120px);
+  margin:calc(var(--rw,120px) / -2) 0 0 calc(var(--rw,120px) / -2);border-radius:50%;
+  border:1px solid rgba(255,222,168,.55);transform:scale(.92);opacity:0;
+  animation:heroRipple 7s cubic-bezier(.22,.61,.36,1) infinite}
+.hero-pulse i:nth-child(2){animation-delay:2.333s}
+.hero-pulse i:nth-child(3){animation-delay:4.666s}
+@keyframes heroRipple{0%{transform:scale(.92);opacity:0}14%{opacity:.3}100%{transform:scale(5.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero-pulse{display:none}}
 /* The descriptor row lands at ~27% of the viewport, right where the corona rim
    is brightest on the right, so the floor is raised there. The .14 valley at 46%
    keeps the rim reading through the h1, which carries its own shadow anyway. */
@@ -498,8 +512,8 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
    corona crowns the heading while the dark limb keeps that heading on deep navy,
    and the lower arc cradles the card strip. Masked top and bottom so the glow
    dissolves into the neighbouring sections instead of cutting a straight seam. */
-.testis::before{content:"";position:absolute;left:44%;top:41%;width:auto;height:176%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:url('assets/eclipse-mark.svg') center/contain no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%);mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%)}
-.testi-head{text-align:center;max-width:34ch;margin:0 auto}
+.testis::before{content:"";position:absolute;left:44%;top:41%;width:auto;height:192%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:url('assets/eclipse-mark.svg') center/contain no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%);mask-image:linear-gradient(180deg,transparent 15%,#000 23%,#000 79%,transparent 86%)}
+.testi-head{text-align:center;max-width:34ch;margin:clamp(1.2rem,5vh,3.4rem) auto 0}
 .testi-head h2{white-space:nowrap}
 .tcar-wrap{position:relative;margin-top:2.6rem}
 .testis .wrap{position:relative}
@@ -633,6 +647,7 @@ body.bar-visible{padding-bottom:64px}
 <!-- HERO -->
 <header class="hero" id="top">
   <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="558" height="1000">
+  <span class="hero-pulse" aria-hidden="true"><i></i><i></i><i></i></span>
   <div class="hero-inner">
     <!-- Co-brand lockup: two arms converging on the gold ×, descriptors hanging
          off the same axis. The × is pinned to row 1 only; centring it across both
@@ -1584,12 +1599,21 @@ if('IntersectionObserver' in window){
   /* BAND_BIAS: 0 sits on the eclipse's lower edge, 1 on the fingertips. The
      midpoint floated the block too low, so it now rides high in that gap. */
   const ECLIPSE_BOTTOM=0.265, FINGERTIP_TOP=0.330, POS_Y=0.59, BAND_BIAS=0.18;
+  /* the ring, measured off autopilot-hand.jpg: centre and width as fractions */
+  const RING_X=0.6285, RING_Y=0.5202, RING_W=0.158;
+  const pulse=document.querySelector('.hero-pulse');
   function place(){
     const iw=img.naturalWidth, ih=img.naturalHeight;
     if(!iw||!ih)return;
     const bw=hero.clientWidth, bh=hero.clientHeight;
-    const scale=Math.max(bw/iw,bh/ih), rh=ih*scale;
-    const offY=(bh-rh)*POS_Y;
+    const scale=Math.max(bw/iw,bh/ih), rh=ih*scale, rw=iw*scale;
+    const offY=(bh-rh)*POS_Y, offX=(bw-rw)/2;
+    if(pulse){
+      pulse.style.left=(offX+RING_X*rw).toFixed(1)+'px';
+      pulse.style.top=(offY+RING_Y*rh).toFixed(1)+'px';
+      pulse.style.setProperty('--rw',(RING_W*rw).toFixed(1)+'px');
+      pulse.classList.add('on');
+    }
     const target=offY+(ECLIPSE_BOTTOM+BAND_BIAS*(FINGERTIP_TOP-ECLIPSE_BOTTOM))*rh;
     /* centre the whole block, descriptors included, not just the logo row */
     const want=target-lock.offsetHeight/2;
