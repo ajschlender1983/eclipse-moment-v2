@@ -136,7 +136,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .lk-brand svg{width:clamp(22px,2.6vw,28px);height:auto;flex:none;filter:drop-shadow(0 0 7px rgba(251,205,102,.55))}
 .lk-x{color:var(--solar);font-size:clamp(1rem,2.2vw,1.35rem);font-weight:400;opacity:.9}
 /* co-brand lockup with descriptors (hero only; the closing lockup stays a single row) */
-.lockup.co{display:grid;grid-template-columns:1fr auto 1fr;column-gap:clamp(.7rem,1.8vw,1.05rem);row-gap:.55rem;width:min(600px,100%);margin:0 auto 1.55rem;align-items:center}
+.lockup.co{display:grid;grid-template-columns:1fr auto 1fr;column-gap:clamp(.7rem,1.8vw,1.05rem);row-gap:.55rem;width:min(600px,100%);margin:0 auto clamp(1.5rem,4vh,2.4rem);align-items:center}
 .lockup.co .lk-brand{gap:clamp(.5rem,1.1vw,.66rem);font-size:0;letter-spacing:0;text-indent:0}
 .lockup.co .lk-brand.unify{grid-column:3;grid-row:1;justify-self:start}
 .lockup.co .lk-brand.pulse{grid-column:1;grid-row:1;justify-self:end}
@@ -247,9 +247,27 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 
 /* broadcast */
 .broadcast{background:linear-gradient(180deg,var(--volcanic),var(--midnight));position:relative;overflow:hidden}
-.broadcast-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 26%;z-index:0}
-.broadcast-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(23,23,29,.9) 0,rgba(13,16,48,.58) 42%,rgba(23,23,29,.92) 100%)}
+/* The Iceland Eclipse mark carries this section, with the photograph seated in
+   its dark disc. The mark's disc is 17.3% of its own width (measured off
+   eclipse-mark.svg), so its dark disc is .346 of the mark across. --disc is a
+   DIAMETER, so the frame is disc / .346 = disc * 2.89, not / .173.
+   Face circle centred on (55%, 40%) of the source, which holds the head, both
+   hands and the ring. */
+/* --disc and --mtop live on the section so the copy can offset itself off the
+   same numbers the medallion is drawn from, instead of guessing a padding. */
+#moment{--disc:clamp(158px,24vw,300px);--mtop:clamp(170px,26vw,300px)}
+.moment-eclipse{position:absolute;left:50%;top:var(--mtop);
+  width:calc(var(--disc)*2.89);height:calc(var(--disc)*2.89);transform:translate(-50%,-50%);
+  z-index:0;pointer-events:none;
+  background:url('assets/eclipse-mark.svg') center/contain no-repeat}
+.moment-face{position:absolute;left:50.9%;top:49.4%;width:var(--disc);height:var(--disc);
+  transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;object-position:55% 40%;
+  filter:brightness(.92) contrast(1.06)}
+@media (max-width:760px){#moment{--disc:clamp(132px,40vw,200px);--mtop:clamp(140px,34vw,210px)}}
+.broadcast-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(23,23,29,.72) 0,rgba(13,16,48,.30) 34%,rgba(23,23,29,.86) 78%,rgba(23,23,29,.96) 100%)}
 .broadcast .wrap{position:relative;z-index:2}
+/* copy starts below the medallion, measured from it rather than eyeballed */
+.moment-inner{position:relative;z-index:2;padding-top:calc(var(--mtop) + var(--disc)/2 + clamp(1.6rem,5vw,3rem))}
 .broadcast .lead.accent{font-size:clamp(1.35rem,2.8vw,1.9rem);font-weight:700;margin-top:1.8rem}
 .trod-cap{font-size:.85rem;color:var(--dim);text-align:center;margin-top:.95rem;letter-spacing:.02em}
 .trod .ripple{transform-box:fill-box;transform-origin:center;animation:trodRipple 8s cubic-bezier(.25,.6,.4,1) infinite}
@@ -392,6 +410,16 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .integration .wrap{max-width:680px;text-align:center}
 .integration .lead{margin-left:auto;margin-right:auto}
 .kicker{font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:1rem}
+/* the closing circle set as a lockup: a small mark, the date as the wordmark,
+   the time beneath. The date is lit off the corona rather than filled flat. */
+.cc-lock{display:flex;flex-direction:column;align-items:center;gap:.15rem;margin-bottom:clamp(1.4rem,3.5vh,2.2rem)}
+.cc-mark{margin-bottom:.55rem}
+.cc-date{font-size:clamp(2rem,5.4vw,3.6rem);font-weight:700;letter-spacing:-.03em;line-height:1;
+  background:linear-gradient(100deg,#fff7e0,var(--solar) 44%,var(--corona));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 22px rgba(251,205,102,.18))}
+.cc-time{margin-top:.6rem;font-size:.74rem;letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;
+  color:rgba(240,246,249,.6);font-weight:500}
 .integration p{margin-top:1.1rem}
 .integration .cta{margin-top:2rem}
 .integration .watch-link{margin-left:1.4rem}
@@ -656,10 +684,7 @@ body.bar-visible{padding-bottom:64px}
 <header class="hero" id="top">
   <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="558" height="1000">
   <span class="hero-pulse" aria-hidden="true"><i></i><i></i><i></i></span>
-  <div class="hero-inner">
-    <!-- Co-brand lockup: two arms converging on the gold ×, descriptors hanging
-         off the same axis. The × is pinned to row 1 only; centring it across both
-         rows turns the block into a table instantly. -->
+  <div class="hero-foot">
     <div class="lockup co" role="img" aria-label="Unify and Pulse. Unify: Massive Global Movement. Pulse: World's First Awareness Ring.">
       <span class="lk-brand unify"><img class="lk-emblem" src="assets/unify-logo.png" alt="" width="360" height="358" decoding="async"><span class="lk-name">UNIFY</span></span>
       <span class="lk-x" aria-hidden="true">×</span>
@@ -667,8 +692,6 @@ body.bar-visible{padding-bottom:64px}
       <span class="lk-desc unify">Massive Global Movement</span>
       <span class="lk-desc pulse">World&rsquo;s First Awareness Ring</span>
     </div>
-  </div>
-  <div class="hero-foot">
     <p class="hero-kicker lock-a">Break autopilot</p>
     <h1>Be present together.</h1>
     <div class="cta-row hero-cta">
@@ -700,7 +723,9 @@ body.bar-visible{padding-bottom:64px}
 <!-- THE MOMENT — totality and the pause, one section, written for the person
      who is not in the meadow. Merged from the old .moment + .broadcast. -->
 <section class="moment" id="moment">
-  <img decoding="async" class="broadcast-bg" src="assets/presence-man.jpg" alt="" loading="lazy">
+  <div class="moment-eclipse" aria-hidden="true">
+    <img decoding="async" class="moment-face" src="assets/presence-man.jpg" alt="" loading="lazy">
+  </div>
   <div class="broadcast-veil" aria-hidden="true"></div>
   <div class="wrap moment-inner">
     <span class="badge">
@@ -827,7 +852,11 @@ body.bar-visible{padding-bottom:64px}
 <section class="integration block" id="closing">
   <div class="wrap">
     <div>
-      <span class="kicker">The closing circle · Friday, August 14 · 19:00 Iceland</span>
+      <p class="cc-lock">
+        <span class="kicker cc-mark">The closing circle</span>
+        <span class="cc-date">Friday, August 14</span>
+        <span class="cc-time">19:00 Iceland</span>
+      </p>
       <h2>Take Totality Home.</h2>
       <p class="ceremony-tag">One intention for yourself. One for the planet.</p>
       <p class="lead">You choose them in the silence. For two days we practice living into them, then the festival closes the circle in the Garden.</p>
@@ -1158,7 +1187,7 @@ if(now>TOTALITY){
   }
 }
 if(now>CEREMONY){
-  document.querySelector('.integration .kicker').textContent='The closing circle';
+  document.querySelector('.integration .cc-mark').textContent='The closing circle';
   const gate=document.querySelector('[data-path="gate"]');
   if(gate)gate.remove();
   const grid=document.getElementById('paths');
@@ -1611,17 +1640,14 @@ if('IntersectionObserver' in window){
   new IntersectionObserver(e=>{finalSeen=e[0].isIntersecting;update()},{threshold:.2}).observe(offer);
 }
 
-/* Sit the lockup in the gap between the corona and the fingertips.
-   Both are fixed points in the photograph (0.265 and 0.330 of its height), but
-   object-fit:cover re-crops per viewport, so where they land has to be computed.
-   On wide screens the eclipse crops out entirely and the clamp takes over. */
+/* Anchor the ring pulse to the ring in the photograph. object-fit:cover re-crops
+   per viewport, so the ring's screen position has to be computed rather than fixed. */
 (function(){
-  const hero=document.querySelector('.hero'), img=document.querySelector('.hero-bg'),
-        inner=document.querySelector('.hero-inner'), lock=document.querySelector('.lockup.co');
-  if(!hero||!img||!inner||!lock)return;
+  const hero=document.querySelector('.hero'), img=document.querySelector('.hero-bg');
+  if(!hero||!img)return;
   /* BAND_BIAS: 0 sits on the eclipse's lower edge, 1 on the fingertips. The
      midpoint floated the block too low, so it now rides high in that gap. */
-  const ECLIPSE_BOTTOM=0.265, FINGERTIP_TOP=0.330, POS_Y=0.59, BAND_BIAS=0.18;
+  const POS_Y=0.59;
   /* the ring, measured off autopilot-hand.jpg: centre and width as fractions */
   const RING_X=0.6285, RING_Y=0.5202, RING_W=0.158;
   const pulse=document.querySelector('.hero-pulse');
@@ -1637,11 +1663,6 @@ if('IntersectionObserver' in window){
       pulse.style.setProperty('--rw',(RING_W*rw).toFixed(1)+'px');
       pulse.classList.add('on');
     }
-    const target=offY+(ECLIPSE_BOTTOM+BAND_BIAS*(FINGERTIP_TOP-ECLIPSE_BOTTOM))*rh;
-    /* centre the whole block, descriptors included, not just the logo row */
-    const want=target-lock.offsetHeight/2;
-    const min=bh*0.045, max=bh*0.55;
-    inner.style.marginTop=Math.max(min,Math.min(max,want))+'px';
   }
   if(img.complete)place(); else img.addEventListener('load',place);
   addEventListener('resize',place);
