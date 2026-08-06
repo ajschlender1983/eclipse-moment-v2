@@ -198,6 +198,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   text-shadow:0 1px 12px rgba(0,0,0,.85);transition:color .2s ease}
 .codeplain:hover,.codeplain:focus-visible{color:var(--glacier)}
 .codeplain.copied{color:var(--solar)}
+.code-row{display:flex;align-items:baseline;gap:.55em}
+.code-use{font-size:clamp(.68rem,1.3vw,.76rem);letter-spacing:.14em;font-weight:500;
+  color:rgba(240,246,249,.5);text-shadow:0 1px 12px rgba(0,0,0,.85)}
 .hero-code .code-terms{flex-basis:100%}
 
 
@@ -439,6 +442,23 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 2px 30px rgba(251,205,102,.34)) drop-shadow(0 1px 3px rgba(8,7,18,.8))}
 .cc-badge{margin:.85rem 0 0;align-self:center}
+/* the ring on volcanic rock sits behind the whole section; the scrim stays heavy
+   at the top so the serif headline reads, and eases where the ring glows through */
+#closing{position:relative;overflow:hidden}
+#closing::before{content:"";position:absolute;inset:0;
+  background:url(assets/totality-ring.jpg) center 30%/auto 108% no-repeat;opacity:.72;
+  -webkit-mask-image:radial-gradient(ellipse 33% 56% at 50% 44%,#000 40%,transparent 96%);
+  mask-image:radial-gradient(ellipse 33% 56% at 50% 44%,#000 40%,transparent 96%)}
+@media(max-width:900px){#closing::before{background-size:cover;background-position:center 32%;
+  -webkit-mask-image:none;mask-image:none}}
+#closing .badge,#closing .cc-date{text-shadow:0 1px 14px rgba(8,7,18,.85)}
+/* the badge lands on the corona's brightest arc, so it needs its own ground */
+#closing .cc-badge{background:rgba(11,10,22,.55);padding:.28rem .7rem;border-radius:99px}
+#closing::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(ellipse 66% 58% at 50% 44%,transparent 58%,rgba(11,10,22,.8) 92%,#0b0a16 100%),
+  linear-gradient(180deg,rgba(11,10,22,.88) 0%,rgba(11,10,22,.42) 26%,rgba(11,10,22,.28) 52%,
+  rgba(11,10,22,.5) 78%,var(--volcanic) 100%)}
+#closing .wrap{position:relative;z-index:1}
 .integration p{margin-top:1.1rem}
 .integration .cta{margin-top:2rem}
 .integration .watch-link{margin-left:1.4rem}
@@ -559,7 +579,9 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .j-lines span{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);opacity:0;font-size:clamp(2.1rem,6vw,4.2rem);font-weight:700;letter-spacing:-.025em;line-height:1.05;background:linear-gradient(100deg,#fff7e0,var(--solar) 42%,var(--corona));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 30px rgba(0,0,0,.85)) drop-shadow(0 1px 6px rgba(0,0,0,.7));will-change:opacity,transform}
 /* the first two lines ride high, clear of the orb they sit over */
 .j-lines span[data-l="0"],.j-lines span[data-l="1"]{top:calc(50% - 24vh)}
-.j-lines span[data-l="2"]{top:calc(50% - min(3.4vw,39px))}
+/* the closing line lands where the other two do, rather than hanging under
+   the epicentre, so all three arrive at the same mark */
+.j-lines span[data-l="2"]{top:calc(50% - 16vh)}
 
 /* testimonials */
 .testis{position:relative;overflow:hidden;z-index:6;margin-top:0;background:radial-gradient(75% 60% at 30% 34%, rgba(73,41,145,.30), transparent 65%), radial-gradient(55% 45% at 82% 62%, rgba(244,39,137,.13), transparent 70%), linear-gradient(180deg, rgba(11,10,22,0) 0, rgba(11,10,22,.72) 14vh, #0b0a16 30vh, var(--volcanic) 100%)}
@@ -718,7 +740,7 @@ body.bar-visible{padding-bottom:64px}
       <a class="cta buy hero-buy" href="https://www.pulsemindfulness.com/order">Get my ring <span class="slash">/</span> $75 off</a>
     </div>
     <p class="hero-code">
-      <button class="codeplain" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button>
+      <span class="code-row"><span class="code-use">Use code</span><button class="codeplain" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button></span>
     </p>
   </div>
   <div class="strip">
@@ -1529,7 +1551,7 @@ if(jSec&&wm){
      so the closing frame is not a band of land sitting over dead space. Only the
      settled world moves: the aerial dive still targets ICE_ANCHOR, or the two
      glowing dots would not line up through the crossfade. */
-  const ICE_SETTLED=0.34;
+  const ICE_SETTLED=0.24;
   /* CSS vw/vh resolve against the documentElement, innerWidth/innerHeight do not.
      Where a scrollbar exists the two disagree, and the map (sized in vw) then
      drifts from anything positioned off innerWidth. Everything here uses the
@@ -1545,9 +1567,7 @@ if(jSec&&wm){
     const dy=(0.3606*h - (0.5-anchor)*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
-    /* the line hangs a fixed 21% of the viewport under the epicentre. Measured
-       from the anchor, not from 50%, or the lift leaves it stranded mid-frame. */
-    return ((anchor-0.5)*vh + vh*0.21)*s;
+    return 0;   /* line 2 is placed in CSS now, with the other two */
   }
   let jRipOn=false;
   function jTick(){
