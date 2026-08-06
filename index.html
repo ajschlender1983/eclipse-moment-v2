@@ -33,7 +33,10 @@
   --dim:rgba(240,246,249,.66);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+/* iOS Safari scrolls the html box, so overflow-x on body alone lets the page
+   drag sideways. clip (not hidden) because hidden here would make html a scroll
+   container and break the journey's position:sticky. */
+html{scroll-behavior:smooth;overflow-x:clip}
 body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--volcanic);color:var(--glacier);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video{max-width:100%;height:auto;display:block}
 
@@ -383,7 +386,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 /* This used to sit under the journey and was pulled up over its empty sticky tail.
    It now follows the offer, so the negative pull and the transparent top would
    drag it over the cards. Both are gone. */
-.ring{margin-top:0;position:relative;z-index:1;padding:clamp(3rem,8vw,5.5rem) 0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
+.ring{margin-top:0;position:relative;z-index:1;overflow-x:clip;padding:clamp(3rem,8vw,5.5rem) 0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
 .cycle-stage{position:relative;width:min(92vw,520px);margin:0 auto;aspect-ratio:9/16}
 .cycle-vid-bg{position:absolute;inset:0;overflow:hidden;border-radius:18px}
 .cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.5rem,3.4vw,2.2rem);text-shadow:0 1px 2px rgba(8,7,18,.94),0 0 12px rgba(8,7,18,.86),0 2px 30px rgba(8,7,18,.92)}
@@ -716,7 +719,11 @@ footer{background:var(--midnight);border-top:1px solid rgba(240,246,249,.12);pad
 footer .partner{letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;margin-top:.4rem}
 
 /* sticky mobile bar */
-.sticky-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(13,16,48,.97);border-top:1px solid rgba(240,246,249,.15);padding:.7rem clamp(1rem,5vw,3rem);display:flex;align-items:center;justify-content:center;gap:clamp(1rem,3vw,2rem);transform:translateY(110%);transition:transform .3s ease}
+/* max-width + shrinkable children: without them the flex items' min-content
+   width forces the fixed bar wider than the viewport, and the whole page
+   drags sideways on iOS */
+.sticky-bar{position:fixed;left:0;right:0;bottom:0;max-width:100%;z-index:50;background:rgba(13,16,48,.97);border-top:1px solid rgba(240,246,249,.15);padding:.7rem clamp(.75rem,5vw,3rem);display:flex;align-items:center;justify-content:center;gap:clamp(.7rem,3vw,2rem);transform:translateY(110%);transition:transform .3s ease}
+.sticky-bar>*{min-width:0}
 body.bar-visible{padding-bottom:64px}
 .sticky-bar.show{transform:translateY(0)}
 .sticky-bar .off{display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;line-height:1.15}
