@@ -33,10 +33,10 @@
   --dim:rgba(240,246,249,.66);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-/* iOS Safari scrolls the html box, so overflow-x on body alone lets the page
-   drag sideways. clip (not hidden) because hidden here would make html a scroll
-   container and break the journey's position:sticky. */
-html{scroll-behavior:smooth;overflow-x:clip}
+/* No overflow-x here on purpose: any non-visible overflow on the root element
+   propagates to the viewport and kills the journey's position:sticky. The
+   sideways drag is fixed at its source instead, on .ring and .sticky-bar. */
+html{scroll-behavior:smooth}
 body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--volcanic);color:var(--glacier);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video{max-width:100%;height:auto;display:block}
 
