@@ -1525,23 +1525,29 @@ if(jSec&&wm){
    height. Everything registers to it: the aerial dive target, the settled map,
    the orb landing, the ripple origin. 0.5 keeps the pulse dead centre. */
   const ICE_ANCHOR=0.5;
+  /* Once the zoom-out has settled, the whole stack eases up into the upper third
+     so the closing frame is not a band of land sitting over dead space. Only the
+     settled world moves: the aerial dive still targets ICE_ANCHOR, or the two
+     glowing dots would not line up through the crossfade. */
+  const ICE_SETTLED=0.34;
   /* CSS vw/vh resolve against the documentElement, innerWidth/innerHeight do not.
      Where a scrollbar exists the two disagree, and the map (sized in vw) then
      drifts from anything positioned off innerWidth. Everything here uses the
      layout basis so the two Iceland dots cannot desync. */
   const VW=()=>document.documentElement.clientWidth, VH=()=>document.documentElement.clientHeight;
-  function frameWorld(s){
+  function frameWorld(s,lift){
     const h0=(wm.offsetWidth||wm.getBoundingClientRect().width)/2;
     const sc=lerp(1,1.10,s), h=h0*sc, vh=VH();
+    const anchor=lerp(ICE_ANCHOR,ICE_SETTLED,lift||0);
     /* Iceland sits at 44.86% / 13.94% of the map. As the zoom-out settles we slide
        the map so that point lands on ICE_ANCHOR, the way the water altar sits at
        the centre of the rings. The orb and the ripples land there too. */
-    const dy=(0.3606*h - (0.5-ICE_ANCHOR)*vh)*s;
+    const dy=(0.3606*h - (0.5-anchor)*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
-    /* the closing line no longer hangs off the band bottom, which is now far below
-       the fold; it sits a fixed distance under the centred epicentre instead */
-    return vh*0.21*s;
+    /* the line hangs a fixed 21% of the viewport under the epicentre. Measured
+       from the anchor, not from 50%, or the lift leaves it stranded mid-frame. */
+    return ((anchor-0.5)*vh + vh*0.21)*s;
   }
   let jRipOn=false;
   function jTick(){
@@ -1563,7 +1569,8 @@ if(jSec&&wm){
     /* Settle the world first: the hand cluster reads the map rect below, so it has
        to be the framed rect or the ring lands where the map used to be. */
     const settle=easeIO(clamp01((p-.72)/.20));
-    const lineDrop=frameWorld(settle);
+    const lift=easeIO(clamp01((p-.90)/.10));
+    const lineDrop=frameWorld(settle,lift);
     /* A: the Circle of Tröð from above, diving toward the water altar — altar glides to center.
        The altar sits at (50.5%, 40%) of the image FILE; account for object-fit:cover crop. */
     const aQ=clamp01(p/.185);
