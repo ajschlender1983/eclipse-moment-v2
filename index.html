@@ -256,7 +256,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
    hands and the ring. */
 /* --disc and --mtop live on the section so the copy can offset itself off the
    same numbers the medallion is drawn from, instead of guessing a padding. */
-#moment{--disc:clamp(158px,24vw,300px);--mtop:clamp(170px,26vw,300px)}
+/* mark = disc * 1.805, and the glow spans about the full mark, so a disc of
+   ~55vw puts the corona on both edges of the frame. Capped so it stays a
+   medallion rather than a mural on a wide desktop. */
+#moment{--disc:min(55vw,780px);--mtop:clamp(200px,34vw,470px)}
 .moment-eclipse{position:absolute;left:50%;top:var(--mtop);
   width:calc(var(--disc)*1.805);height:calc(var(--disc)*1.805);transform:translate(-50%,-50%);
   z-index:0;pointer-events:none;
@@ -264,7 +267,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .moment-face{position:absolute;left:51.14%;top:49.76%;width:var(--disc);height:var(--disc);
   transform:translate(-50%,-50%);border-radius:50%;object-fit:cover;object-position:55% 40%;
   filter:brightness(.92) contrast(1.06)}
-@media (max-width:760px){#moment{--disc:clamp(132px,40vw,200px);--mtop:clamp(140px,34vw,210px)}}
+@media (max-width:760px){#moment{--disc:55vw;--mtop:clamp(150px,38vw,260px)}}
 .broadcast-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(23,23,29,.72) 0,rgba(13,16,48,.30) 34%,rgba(23,23,29,.86) 78%,rgba(23,23,29,.96) 100%)}
 .broadcast .wrap{position:relative;z-index:2}
 /* copy starts below the medallion, measured from it rather than eyeballed */
@@ -352,6 +355,11 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 
 /* the totality line: one statement on clean ground, above the eclipse. */
 .totality-line{background:#000;text-align:center;padding:clamp(4rem,11vh,7.5rem) 0 clamp(3.4rem,9vh,6rem)}
+/* seated between the stats band and the ceremony photograph, breaking out of the
+   wrap to full bleed, with the type drifting against the black as you pass it */
+.tl-para{position:relative;z-index:2;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;
+  overflow:hidden;box-shadow:0 -40px 80px -20px rgba(0,0,0,.9),0 40px 80px -20px rgba(0,0,0,.9)}
+.tl-para .tl{will-change:transform}
 .tl{font-size:clamp(2.15rem,6.2vw,4.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.04;
   width:min(1120px,92%);margin:0 auto;text-wrap:balance;color:var(--glacier)}
 
@@ -723,9 +731,6 @@ body.bar-visible{padding-bottom:64px}
 </header>
 
 <!-- THE TOTALITY LINE -->
-<section class="totality-line">
-  <h2 class="tl">Two minutes of total<br>presence.</h2>
-</section>
 
 <!-- FOUNDER INVITATION (placeholder thumbnail — video pending) -->
 <!-- THE MOMENT — totality and the pause, one section, written for the person
@@ -762,6 +767,9 @@ body.bar-visible{padding-bottom:64px}
       <span class="cs-note">One for yourself. One for the planet.</span>
     </div>
   </div>
+  <section class="totality-line tl-para">
+    <h2 class="tl">Two minutes of total<br>presence.</h2>
+  </section>
   <figure class="ceremony-shot">
     <img decoding="async" src="assets/ceremony-circle.jpg" alt="Aerial view of fifteen rings of people seated around a flowered water altar on an Icelandic lava field, a festival campground of tents and domes encircling them, a glacier on the horizon" width="2000" height="1116" loading="lazy">
     <p class="cs-date"><span>August 12</span><em>2026</em></p>
@@ -1322,6 +1330,19 @@ if(strip){
 const SCROLL_FNS=[];let _stk=false;
 function onScrollFrame(fn){SCROLL_FNS.push(fn)}
 function _runScroll(){_stk=false;for(let i=0;i<SCROLL_FNS.length;i++)SCROLL_FNS[i]()}
+/* the black band's type drifts against its own background as it passes */
+(function(){
+  const band=document.querySelector('.tl-para'), tl=band&&band.querySelector('.tl');
+  if(!band||!tl||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  let vis=false;
+  new IntersectionObserver(function(e){vis=e[0].isIntersecting},{rootMargin:'120px'}).observe(band);
+  onScrollFrame(function(){
+    if(!vis)return;
+    const r=band.getBoundingClientRect();
+    const p=(r.top+r.height/2-innerHeight/2)/innerHeight;   /* -1 .. 1 through the frame */
+    tl.style.transform='translate3d(0,'+(p*-46).toFixed(1)+'px,0)';
+  });
+})();
 function _reqScroll(){if(!_stk){_stk=true;requestAnimationFrame(_runScroll)}}
 addEventListener('scroll',_reqScroll,{passive:true});
 addEventListener('resize',_reqScroll,{passive:true});
