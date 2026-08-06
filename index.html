@@ -1453,9 +1453,18 @@ if(jSec&&wm){
      frame the land band instead: the world rises toward the top of the frame and
      the closing line drops into the room it leaves behind. */
   const BAND_TOP=0.04, BAND_BOT=0.80;
+  /* Where Iceland lives on screen, as a fraction of viewport height. The aerial
+     dive and the world map must agree on this or the two glowing dots do not
+     line up through the crossfade. One number, used by both. */
+  const ICE_ANCHOR=0.30;
+  /* CSS vw/vh resolve against the documentElement, innerWidth/innerHeight do not.
+     Where a scrollbar exists the two disagree, and the map (sized in vw) then
+     drifts from anything positioned off innerWidth. Everything here uses the
+     layout basis so the two Iceland dots cannot desync. */
+  const VW=()=>document.documentElement.clientWidth, VH=()=>document.documentElement.clientHeight;
   function frameWorld(s){
     const h0=(wm.offsetWidth||wm.getBoundingClientRect().width)/2;
-    const sc=lerp(1,1.10,s), h=h0*sc, vh=innerHeight;
+    const sc=lerp(1,1.10,s), h=h0*sc, vh=VH();
     /* Frame land + closing line as one stack, centred and biased up. A fixed top
        anchor reads well at 1440 and dumps half a phone screen of void at 390,
        because the map is 2:1 and a phone frame is not. */
@@ -1465,7 +1474,7 @@ if(jSec&&wm){
     /* Iceland used to settle dead centre, which left a screen of void above the
        land. Bias the whole stack up by a fifth of the viewport so the map reads as
        framed at the top and the closing line has the lower half to itself. */
-    const dy=(0.3606*h - 0.20*vh)*s;
+    const dy=(0.3606*h - (0.5-ICE_ANCHOR)*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
     /* the closing line no longer hangs off the band bottom, which is now far below
@@ -1499,9 +1508,9 @@ if(jSec&&wm){
     const aS=lerp(1,2.9,Math.pow(aQ,1.6));
     let atx=0, aty=0;
     if(window.__iceDot){
-      const px=window.__iceDot.x*innerWidth, py=window.__iceDot.y*innerHeight;
+      const px=window.__iceDot.x*VW(), py=window.__iceDot.y*VH();
       jAerial.style.transformOrigin=px.toFixed(1)+'px '+py.toFixed(1)+'px';
-      atx=(innerWidth/2-px)*aQ; aty=(innerHeight/2-py)*aQ;
+      atx=(VW()/2-px)*aQ; aty=(VH()*ICE_ANCHOR-py)*aQ;
     }
     const aO=1-clamp01((p-.2)/.07);
     jAerial.style.transform='translate('+atx.toFixed(1)+'px,'+aty.toFixed(1)+'px) scale('+aS.toFixed(4)+')';
@@ -1528,7 +1537,7 @@ if(jSec&&wm){
       scale=lerp(1,.055,t);
       const mr=wm.getBoundingClientRect();
       const icx=mr.left+.4486*mr.width, icy=mr.top+.1394*mr.height;
-      tx=lerp(0,icx-innerWidth/2,tv); ty=lerp(0,icy-innerHeight/2,tv);
+      tx=lerp(0,icx-VW()/2,tv); ty=lerp(0,icy-VH()/2,tv);
       zo=1-clamp01((p-.94)/.05);
     }
     jZoom.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+scale.toFixed(4)+')';
@@ -1540,8 +1549,8 @@ if(jSec&&wm){
     jGlow.style.opacity=(clamp01((p-.44)/.12)*lerp(.72,.2,easeIO(clamp01((p-.55)/.26)))).toFixed(3);
     /* the ripple launches at the pivot from wherever the orb is, and follows it in */
     if(jRip){
-      jRip.style.left=(innerWidth/2+tx).toFixed(1)+'px';
-      jRip.style.top=(innerHeight/2+ty).toFixed(1)+'px';
+      jRip.style.left=(VW()/2+tx).toFixed(1)+'px';
+      jRip.style.top=(VH()/2+ty).toFixed(1)+'px';
       jRip.style.opacity=clamp01((p-.70)/.045).toFixed(3);
       if(p>=.70&&!jRipOn){
         jRipOn=true;
