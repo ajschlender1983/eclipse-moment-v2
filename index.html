@@ -1514,7 +1514,10 @@ if(jSec&&wm){
   /* Where Iceland lives on screen, as a fraction of viewport height. The aerial
      dive and the world map must agree on this or the two glowing dots do not
      line up through the crossfade. One number, used by both. */
-  const ICE_ANCHOR=0.30;
+/* Where the Iceland epicentre sits in the frame, as a fraction of viewport
+   height. Everything registers to it: the aerial dive target, the settled map,
+   the orb landing, the ripple origin. 0.5 keeps the pulse dead centre. */
+  const ICE_ANCHOR=0.5;
   /* CSS vw/vh resolve against the documentElement, innerWidth/innerHeight do not.
      Where a scrollbar exists the two disagree, and the map (sized in vw) then
      drifts from anything positioned off innerWidth. Everything here uses the
@@ -1523,15 +1526,9 @@ if(jSec&&wm){
   function frameWorld(s){
     const h0=(wm.offsetWidth||wm.getBoundingClientRect().width)/2;
     const sc=lerp(1,1.10,s), h=h0*sc, vh=VH();
-    /* Frame land + closing line as one stack, centred and biased up. A fixed top
-       anchor reads well at 1440 and dumps half a phone screen of void at 390,
-       because the map is 2:1 and a phone frame is not. */
     /* Iceland sits at 44.86% / 13.94% of the map. As the zoom-out settles we slide
-       the map so that point lands dead centre of frame, the way the water altar
-       sits at the centre of the rings. The orb and the ripples land there too. */
-    /* Iceland used to settle dead centre, which left a screen of void above the
-       land. Bias the whole stack up by a fifth of the viewport so the map reads as
-       framed at the top and the closing line has the lower half to itself. */
+       the map so that point lands on ICE_ANCHOR, the way the water altar sits at
+       the centre of the rings. The orb and the ripples land there too. */
     const dy=(0.3606*h - (0.5-ICE_ANCHOR)*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
