@@ -426,6 +426,17 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
   .cycle-stage{width:100%}
   .cycle-vid-bg{border-radius:0}
 }
+/* Desktop gets the widescreen cut, so the stage turns landscape to match it.
+   Same breakpoint as the JS that picks the file: change one and change both. */
+@media (min-width:900px){
+  .cycle-stage{width:min(92vw,1040px);aspect-ratio:16/9}
+  .cycle-stage h2{top:26%}
+  .bc-left{left:17%;top:56%}
+  .bc-right{left:83%;top:56%}
+  .bc-bottom{left:50%;top:84%}
+  .beat-card{width:min(26%,11.5rem)}
+  .bc-bottom{width:min(40%,16rem)}
+}
 
 /* integration */
 .integration{background:linear-gradient(180deg,#0b0a16 0%,#0b0a16 12%,var(--volcanic) 100%)}
@@ -462,9 +473,19 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .cc-badge{margin:.85rem 0 0;align-self:center}
 /* the ring on volcanic rock sits behind the whole section; the scrim stays heavy
    at the top so the serif headline reads, and eases where the ring glows through */
-#closing{position:relative;overflow:hidden}
+/* Sits on top of the journey's final screen and fades up over the held world.
+   The vars default to 1 so the section is fully visible with JS off or under
+   reduced motion; the journey's scroll handler drives them down and back up. */
+/* The base gradient stays on the element, behind the ring image, but carries its
+   alpha in --rv so the whole ground can fade up. It cannot live in ::after:
+   that paints above ::before and would bury the photograph. */
+#closing{position:relative;overflow:hidden;margin-top:-100vh;z-index:8;--rv:1;--tv:1;--bv:1;
+  background:linear-gradient(180deg,rgba(11,10,22,var(--rv)) 0%,rgba(11,10,22,var(--rv)) 12%,rgba(23,23,29,var(--rv)) 100%)}
+.cc-body>*{opacity:var(--tv);transform:translateY(calc((1 - var(--tv)) * 22px))}
+.cc-body>.cta{opacity:var(--bv);transform:translateY(calc((1 - var(--bv)) * 16px))}
+@media (prefers-reduced-motion:reduce){.cc-body>*{opacity:1;transform:none}}
 #closing::before{content:"";position:absolute;inset:0;
-  background:url(assets/totality-ring.jpg) center 30%/auto 108% no-repeat;opacity:.72;
+  background:url(assets/totality-ring.jpg) center 30%/auto 108% no-repeat;opacity:calc(.72 * var(--rv));
   -webkit-mask-image:radial-gradient(ellipse 33% 56% at 50% 44%,#000 40%,transparent 96%);
   mask-image:radial-gradient(ellipse 33% 56% at 50% 44%,#000 40%,transparent 96%)}
 @media(max-width:900px){#closing::before{background-size:cover;background-position:center 32%;
@@ -472,7 +493,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 #closing .badge,#closing .cc-date{text-shadow:0 1px 14px rgba(8,7,18,.85)}
 /* the badge lands on the corona's brightest arc, so it needs its own ground */
 #closing .cc-badge{background:rgba(11,10,22,.55);padding:.28rem .7rem;border-radius:99px}
-#closing::after{content:"";position:absolute;inset:0;background:
+#closing::after{content:"";position:absolute;inset:0;opacity:var(--rv);background:
   radial-gradient(ellipse 66% 58% at 50% 44%,transparent 58%,rgba(11,10,22,.8) 92%,#0b0a16 100%),
   linear-gradient(180deg,rgba(11,10,22,.88) 0%,rgba(11,10,22,.42) 26%,rgba(11,10,22,.28) 52%,
   rgba(11,10,22,.5) 78%,var(--volcanic) 100%)}
@@ -482,7 +503,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .integration .watch-link{margin-left:1.4rem}
 
 /* journey — Iceland → the water altar → the hand → the world */
-.journey{height:640vh;position:relative;background:#0b0a16}
+/* 640vh of animation + one screen of hold. During the hold the world stays put
+   and the closing circle fades up over it, instead of the map sliding away and
+   leaving a screen of nothing before the next section. */
+.journey{height:740vh;position:relative;background:#0b0a16}
 .journey-sticky{position:sticky;top:0;height:100vh;overflow:hidden;background:radial-gradient(70% 55% at 25% 22%, rgba(73,41,145,.30), transparent 68%), radial-gradient(60% 50% at 78% 72%, rgba(244,39,137,.16), transparent 70%), #0b0a16}
 
 /* film strip — the story runs once, then holds on the last frame */
@@ -916,7 +940,7 @@ body.bar-visible{padding-bottom:64px}
 
 <section class="integration block" id="closing">
   <div class="wrap">
-    <div>
+    <div class="cc-body">
       <p class="cc-lock">
         <span class="kicker cc-mark">The closing circle</span>
         <span class="cc-date">Friday, August 14</span>
@@ -987,7 +1011,9 @@ body.bar-visible{padding-bottom:64px}
   <div class="wrap">
     <div class="cycle-stage">
       <div class="cycle-vid-bg" aria-hidden="true">
-        <video class="cycle-video" src="assets/cycle-eclipse.mp4" poster="assets/cycle-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
+        <!-- src is chosen in JS from the breakpoint so only one of the two ever
+             downloads: portrait fills a phone, the wide cut suits a desktop frame -->
+        <video class="cycle-video" data-tall="assets/cycle-eclipse.mp4" data-tall-poster="assets/cycle-poster.jpg" data-wide="assets/cycle-eclipse-wide.mp4" data-wide-poster="assets/cycle-poster-wide.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
       </div>
       <h2 class="cycle-title"><span class="ct-lead">One</span><img class="ct-logo" src="assets/pulse-logo-solid.svg" alt="pulse" width="391" height="157" decoding="async"><span class="ct-lead">brings you back.</span></h2>
       <div class="cycle-cards">
@@ -1593,9 +1619,20 @@ if(jSec&&wm){
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
     return 0;   /* line 2 is placed in CSS now, with the other two */
   }
+  /* The closing circle assembles over the held world: its ground arrives first,
+     then the words, then the button. Ramps overlap so it reads as one move. */
+  const closingEl=document.getElementById('closing');
+  const ramp=(v,a,b)=>{const t=clamp01((v-a)/(b-a));return t*t*(3-2*t)};
+  function revealClosing(q){
+    if(!closingEl)return;
+    closingEl.style.setProperty('--rv',ramp(q,0,.46).toFixed(3));
+    closingEl.style.setProperty('--tv',ramp(q,.22,.72).toFixed(3));
+    closingEl.style.setProperty('--bv',ramp(q,.58,.96).toFixed(3));
+  }
   let jRipOn=false;
   function jTick(){
     if(jReduced){
+      revealClosing(1);
       jZoom.style.display='none'; jAerial.style.display='none'; jTrod2.style.display='none';
       if(jRip)jRip.style.display='none';
       wm.style.opacity=1;
@@ -1608,7 +1645,14 @@ if(jSec&&wm){
     }
     const r=jSec.getBoundingClientRect();
     if(r.bottom<-80||r.top>innerHeight+80) return;
-    const p=clamp01(-r.top/(r.height-innerHeight));
+    /* The animation finishes with one screen of scroll still left. p drives the
+       animation over that first stretch; q drives the closing reveal over the
+       hold that follows, while the panel is still stuck. */
+    const raw=clamp01(-r.top/(r.height-innerHeight));
+    const ANIM=(r.height-2*innerHeight)/(r.height-innerHeight);
+    const p=clamp01(raw/ANIM);
+    const q=clamp01((raw-ANIM)/(1-ANIM));
+    revealClosing(q);
     window.__jp=p;
     /* Settle the world first: the hand cluster reads the map rect below, so it has
        to be the framed rect or the ring lands where the map used to be. */
@@ -1685,7 +1729,9 @@ if(jSec&&wm){
     const WIN=[[.03,.11,.24,.32],[.40,.48,.56,.62],[.64,.74,9,9]];
     jLines.forEach(function(el,i){
       const w=WIN[i];
-      const o=clamp01((p-w[0])/(w[1]-w[0])) * (w[2]>1?1:(1-clamp01((p-w[2])/(w[3]-w[2]))));
+      /* line 2 has no closing window of its own; it clears out on the hold, as
+         the closing circle takes the frame */
+      const o=clamp01((p-w[0])/(w[1]-w[0])) * (w[2]>1?(i===2?1-ramp(q,.02,.4):1):(1-clamp01((p-w[2])/(w[3]-w[2]))));
       el.style.opacity=o.toFixed(3);
       const drop=(i===2?lineDrop:0);
       el.style.transform='translateY(calc('+(-50+ (1-o)*2.2).toFixed(2)+'% + '+drop.toFixed(1)+'px))';
@@ -1756,6 +1802,20 @@ if('IntersectionObserver' in window){
 /* Cycle video — parallax drift + pause offscreen */
 const cyv=document.querySelector('.cycle-video');
 if(cyv){
+  /* Pick the cut that fits the frame. Only swap when the breakpoint is actually
+     crossed, since assigning src restarts playback. */
+  const wideMQ=matchMedia('(min-width:900px)');
+  function pickCut(){
+    const wide=wideMQ.matches;
+    const src=wide?cyv.dataset.wide:cyv.dataset.tall;
+    if(cyv.getAttribute('src')===src)return;
+    cyv.poster=wide?cyv.dataset.widePoster:cyv.dataset.tallPoster;
+    cyv.src=src;
+    cyv.classList.toggle('is-wide',wide);
+    if(!cyv.paused||cyv.autoplay)cyv.play().catch(function(){});
+  }
+  pickCut();
+  wideMQ.addEventListener('change',pickCut);
   new IntersectionObserver(function(e){ if(e[0].isIntersecting){cyv.play().catch(function(){})}else{cyv.pause()} },{rootMargin:'120px'}).observe(cyv);
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
     onScrollFrame(function(){
