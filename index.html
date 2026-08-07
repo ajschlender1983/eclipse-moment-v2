@@ -1584,6 +1584,13 @@ if(jSec&&wm){
   const clamp01=v=>Math.min(1,Math.max(0,v));
   const lerp=(a,b,t)=>a+(b-a)*t;
   const easeIO=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  /* Cached, not read per frame: measuring inside the scroll handler would force a
+     layout on every tick. Re-measured when the box can actually change. */
+  let jL2H=0;
+  const measureL2=()=>{if(jLines[2])jL2H=jLines[2].offsetHeight||0};
+  measureL2();
+  addEventListener('resize',measureL2,{passive:true});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measureL2);
   const jAerial=jSec.querySelector('.j-aerial'), jTrod2=jSec.querySelector('.j-trod2');
   /* The dotted grid only carries land between 4% and 80% of the canvas height, so
      a centred canvas leaves a dead band top and bottom. As the zoom-out settles we
@@ -1617,7 +1624,13 @@ if(jSec&&wm){
     const dy=(0.3606*h - (0.5-anchor)*vh)*s;
     const dx=0.1028*h*s;          /* (0.5 - 0.4486) * width, width = 2h */
     wm.style.transform='translate(calc(-50% + '+dx.toFixed(1)+'px),calc(-50% + '+dy.toFixed(1)+'px)) scale('+sc.toFixed(4)+')';
-    return 0;   /* line 2 is placed in CSS now, with the other two */
+    /* The land rises through the last tenth of the scroll and would otherwise
+       climb straight through "One pulse.". Lift the line only once the map's top
+       edge gets close, and only by the shortfall, so it keeps its mark for the
+       whole approach and never travels further than it has to. */
+    const mapTop=vh/2+dy-h/2;
+    const clear=0.22*vh + jL2H/2 + 26;   /* 0.22vh mirrors top:calc(50% - 28vh) */
+    return -Math.max(0,clear-mapTop);
   }
   /* The closing circle assembles over the held world: its ground arrives first,
      then the words, then the button. Ramps overlap so it reads as one move. */
