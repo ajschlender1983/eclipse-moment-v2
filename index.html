@@ -1306,16 +1306,33 @@ if(now>CEREMONY){
 
 /* Release meters: full when they come into view, then they drain to what is left.
    TODO (dev owner TBD): data-left/data-total come from live inventory. */
+const METER_MS=2400;   /* the bar's transition, so the count lands with the bar */
+function countDown(el,from,to){
+  const t0=performance.now();
+  let shown=-1;
+  (function tick(now){
+    const t=Math.min(1,(now-t0)/METER_MS);
+    const v=Math.round(from+(to-from)*(1-Math.pow(1-t,3)));   /* decelerates, like the bar */
+    if(v!==shown){shown=v; el.textContent=v.toLocaleString()}  /* only write on a real change */
+    if(t<1)requestAnimationFrame(tick);
+  })(t0);
+}
 document.querySelectorAll('.meter').forEach(function(m){
   const left=+m.dataset.left, total=+m.dataset.total;
   const pct=Math.max(3,Math.min(100,Math.round(left/total*1000)/10));
   const fill=m.querySelector('.meter-fill');
+  const num=m.querySelector('.meter-label b');
   if(pct<=25)m.classList.add('scarce');
+  /* Without JS, or without motion, the label already holds the real figure. */
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){fill.style.width=pct+'%';return}
+  if(num)num.textContent=total.toLocaleString();   /* start full, alongside the bar */
   new IntersectionObserver(function(en,obs){
     if(!en[0].isIntersecting)return;
     obs.disconnect();
-    setTimeout(function(){fill.style.width=pct+'%'},260);
+    setTimeout(function(){
+      fill.style.width=pct+'%';
+      if(num)countDown(num,total,left);
+    },260);
   },{threshold:.6}).observe(m);
 });
 
