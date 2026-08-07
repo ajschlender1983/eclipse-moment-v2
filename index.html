@@ -785,7 +785,7 @@ body.bar-visible{padding-bottom:64px}
          offer section at runtime, so this can never drift out of step with them. -->
     <div class="meter hero-meter" data-sum>
       <div class="meter-track"><span class="meter-fill"></span></div>
-      <p class="meter-label"><b></b> rings left in the eclipse release</p>
+      <p class="meter-label">rings remaining</p>
     </div>
   </div>
   <div class="strip">
@@ -1300,8 +1300,16 @@ if(now>CEREMONY){
   });
   if(!total){sum.remove();return}          /* nothing to sum: show nothing, not a zero */
   sum.dataset.left=left; sum.dataset.total=total;
-  const b=sum.querySelector('.meter-label b');
-  if(b)b.textContent=left.toLocaleString();
+  /* The hero shows the bar alone, so the figure it stands for is given to
+     assistive tech instead of being drawn. */
+  const track=sum.querySelector('.meter-track');
+  if(track){
+    track.setAttribute('role','progressbar');
+    track.setAttribute('aria-valuemin','0');
+    track.setAttribute('aria-valuemax',String(total));
+    track.setAttribute('aria-valuenow',String(left));
+    track.setAttribute('aria-label',left.toLocaleString()+' of '+total.toLocaleString()+' rings remaining');
+  }
 })();
 
 /* Release meters: full when they come into view, then they drain to what is left.
