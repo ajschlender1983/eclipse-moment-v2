@@ -391,10 +391,9 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 .cycle-vid-bg{position:absolute;inset:0;overflow:hidden;border-radius:18px}
 .cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.55rem,3.6vw,2.35rem);text-shadow:0 1px 2px rgba(8,7,18,.94),0 0 12px rgba(8,7,18,.86),0 2px 30px rgba(8,7,18,.92)}
 /* the wordmark is the anchor, so the words on either side step back a weight
-   and the tail goes italic, the same hierarchy the offer cards use */
+   and read as one continuous sentence around it */
 .cycle-title{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.3em;line-height:1.15}
 .cycle-title .ct-lead{font-weight:400}
-.cycle-title em{font-style:italic;font-weight:400}
 /* an img takes no text-shadow, so it carries the headline's scrim as a filter */
 .cycle-title .ct-logo{height:.94em;width:auto;align-self:center;transform:translateY(.05em);
   filter:drop-shadow(0 1px 2px rgba(8,7,18,.94)) drop-shadow(0 2px 22px rgba(8,7,18,.9))}
@@ -990,7 +989,7 @@ body.bar-visible{padding-bottom:64px}
       <div class="cycle-vid-bg" aria-hidden="true">
         <video class="cycle-video" src="assets/cycle-eclipse.mp4" poster="assets/cycle-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends ripples across water"></video>
       </div>
-      <h2 class="cycle-title"><span class="ct-lead">One</span><img class="ct-logo" src="assets/pulse-logo-solid.svg" alt="pulse" width="391" height="157" decoding="async"><em>brings you back.</em></h2>
+      <h2 class="cycle-title"><span class="ct-lead">One</span><img class="ct-logo" src="assets/pulse-logo-solid.svg" alt="pulse" width="391" height="157" decoding="async"><span class="ct-lead">brings you back.</span></h2>
       <div class="cycle-cards">
         <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration at the perfect time.</div></div>
         <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
