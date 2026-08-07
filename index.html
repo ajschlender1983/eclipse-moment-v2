@@ -595,11 +595,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 @media (max-width:520px){.wclock{grid-template-columns:repeat(3,1fr)}}
 .j-lines{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92%,760px);text-align:center;pointer-events:none;z-index:4}
 .j-lines span{display:block;position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);opacity:0;font-size:clamp(2.1rem,6vw,4.2rem);font-weight:700;letter-spacing:-.025em;line-height:1.05;background:linear-gradient(100deg,#fff7e0,var(--solar) 42%,var(--corona));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 30px rgba(0,0,0,.85)) drop-shadow(0 1px 6px rgba(0,0,0,.7));will-change:opacity,transform}
-/* the first two lines ride high, clear of the orb they sit over */
-.j-lines span[data-l="0"],.j-lines span[data-l="1"]{top:calc(50% - 24vh)}
-/* the closing line lands where the other two do, rather than hanging under
-   the epicentre, so all three arrive at the same mark */
-.j-lines span[data-l="2"]{top:calc(50% - 16vh)}
+/* All three lines share one mark, high and clear of the hand beneath them.
+   Any per-line offset here, or a JS transform on line 2, makes the sequence
+   look like it is stepping down the frame as you scroll. */
+.j-lines span{top:calc(50% - 28vh)}
 
 /* testimonials */
 .testis{position:relative;overflow:hidden;z-index:6;margin-top:0;background:radial-gradient(75% 60% at 30% 34%, rgba(73,41,145,.30), transparent 65%), radial-gradient(55% 45% at 82% 62%, rgba(244,39,137,.13), transparent 70%), linear-gradient(180deg, rgba(11,10,22,0) 0, rgba(11,10,22,.72) 14vh, #0b0a16 30vh, var(--volcanic) 100%)}
