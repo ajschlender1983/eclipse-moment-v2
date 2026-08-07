@@ -192,19 +192,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* the code line hangs off the foot of the hero so it never crowds the ring */
 /* in flow between the centred stack and the strip, so it sits at the foot of the
    image without ever overlapping the countdown bar */
-/* understated, the same treatment the bar uses: amount over code, no chrome */
-.hero-code{display:flex;flex-direction:column;align-items:center;gap:.14rem;width:min(620px,92%);margin:0 auto;line-height:1.2}
 .hero-buy{padding-left:clamp(2.1rem,7vw,3.4rem);padding-right:clamp(2.1rem,7vw,3.4rem);white-space:nowrap}
-.hero-buy .slash{opacity:.4;margin:0 .2em;font-weight:400}
-.codeplain{font:inherit;font-size:clamp(.68rem,1.3vw,.76rem);font-weight:700;letter-spacing:.14em;
-  background:none;border:0;padding:0;cursor:pointer;color:rgba(240,246,249,.72);
-  text-shadow:0 1px 12px rgba(0,0,0,.85);transition:color .2s ease}
-.codeplain:hover,.codeplain:focus-visible{color:var(--glacier)}
-.codeplain.copied{color:var(--solar)}
-.code-row{display:flex;align-items:baseline;gap:.55em}
-.code-use{font-size:clamp(.68rem,1.3vw,.76rem);letter-spacing:.14em;font-weight:500;
-  color:rgba(240,246,249,.5);text-shadow:0 1px 12px rgba(0,0,0,.85)}
-.hero-code .code-terms{flex-basis:100%}
+/* the release meter, sized down and lit for a photographic background */
+.hero-meter{width:min(300px,74%);margin:1.15rem auto 0}
+.hero-meter .meter-track{height:6px;background:rgba(11,10,22,.5);box-shadow:inset 0 0 0 1px rgba(251,205,102,.34),0 1px 12px rgba(0,0,0,.5)}
+.hero-meter .meter-label{margin-top:.5rem;font-size:clamp(.68rem,1.3vw,.76rem);color:rgba(240,246,249,.76);
+  text-shadow:0 1px 12px rgba(0,0,0,.85)}
 
 
 /* countdown strip */
@@ -786,11 +779,14 @@ body.bar-visible{padding-bottom:64px}
     <p class="hero-kicker lock-a">Break autopilot</p>
     <h1>Be present together.</h1>
     <div class="cta-row hero-cta">
-      <a class="cta buy hero-buy" href="https://www.pulsemindfulness.com/thepulsering?utm_source=adam_schlender&amp;utm_medium=referral&amp;utm_campaign=eclipse-unify-2026">Get my ring <span class="slash">/</span> $75 off</a>
+      <a class="cta buy hero-buy" href="https://www.pulsemindfulness.com/thepulsering?utm_source=adam_schlender&amp;utm_medium=referral&amp;utm_campaign=eclipse-unify-2026">Get my ring</a>
     </div>
-    <p class="hero-code">
-      <span class="code-row"><span class="code-use">Use code</span><button class="codeplain" type="button" data-code="ECLIPSE75VIP" aria-label="Copy the code ECLIPSE75VIP">ECLIPSE75VIP</button></span>
-    </p>
+    <!-- Scarcity, not price. The numbers are summed from the release meters in the
+         offer section at runtime, so this can never drift out of step with them. -->
+    <div class="meter hero-meter" data-sum>
+      <div class="meter-track"><span class="meter-fill"></span></div>
+      <p class="meter-label"><b></b> rings left in the eclipse release</p>
+    </div>
   </div>
   <div class="strip">
     <div class="strip-inner" aria-live="off">
@@ -1291,6 +1287,22 @@ if(now>CEREMONY){
   grid.style.margin='2.4rem auto 0';
   document.querySelector('.offer h2').textContent='Your ring finds you at home';
 }
+
+/* The hero meter carries no numbers of its own: it is the sum of the release
+   meters below it. One set of figures on the page, so the hero cannot contradict
+   the offer cards, and it follows for free once inventory is wired. */
+(function(){
+  const sum=document.querySelector('.meter[data-sum]');
+  if(!sum)return;
+  let left=0,total=0;
+  document.querySelectorAll('.meter:not([data-sum])').forEach(function(m){
+    left+=+m.dataset.left||0; total+=+m.dataset.total||0;
+  });
+  if(!total){sum.remove();return}          /* nothing to sum: show nothing, not a zero */
+  sum.dataset.left=left; sum.dataset.total=total;
+  const b=sum.querySelector('.meter-label b');
+  if(b)b.textContent=left.toLocaleString();
+})();
 
 /* Release meters: full when they come into view, then they drain to what is left.
    TODO (dev owner TBD): data-left/data-total come from live inventory. */
@@ -1928,7 +1940,7 @@ const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 })();
 
 /* Tap the code to copy it, since nobody wants to retype ECLIPSE75VIP */
-document.querySelectorAll('.codechip,.codeplain').forEach(function(b){
+document.querySelectorAll('.codechip').forEach(function(b){
   b.addEventListener('click',function(){
     const code=b.dataset.code, done=function(){
       const was=b.textContent;
