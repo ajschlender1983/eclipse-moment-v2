@@ -1908,36 +1908,51 @@ if(fv)new IntersectionObserver(function(e){
    straight at it or set SHEET_WEBHOOK on the worker to fan out; nothing here
    needs to change.
 
-   The local queue is a failure buffer, not a store: an address is only kept in
-   the browser if the POST did not get through, and the next page load retries
-   it. The audience for this page will be on cellular in rural Iceland, so a
-   dropped request is a normal event rather than an edge case. */
-const ESP={endpoint:'https://eclipse-leads.ajschlender.workers.dev/lead', listId:'', source:'eclipse-landing'};
+   Every address is written twice: once in the browser and once to the worker.
+   The browser copy is kept whether or not the send succeeded, so a lead survives
+   the worker being down, and anything still unsent is retried on the next visit.
+   The audience for this page will be on cellular in rural Iceland, so a dropped
+   request is a normal event rather than an edge case.
 
+   Worth being clear about the limit of the browser copy: it lives in that one
+   visitor's browser, so it protects their submission through a retry. It is not
+   somewhere the list can be read from. The worker is the record. */
+const ESP={endpoint:'https://eclipse-leads.ajschlender.workers.dev/lead', listId:'', source:'eclipse-landing'};
+const LEAD_CAP=200;   /* someone else's address should not live in a stranger's browser forever */
+
+function readLeads(){
+  try{ return JSON.parse(localStorage.getItem('pulse.leads')||'[]') }catch(err){ return [] }
+}
+function writeLeads(q){
+  try{ localStorage.setItem('pulse.leads',JSON.stringify(q.slice(-LEAD_CAP))) }catch(err){}
+}
 function sendLead(lead){
   return fetch(ESP.endpoint,{
     method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(lead)
   }).then(function(r){ if(!r.ok)throw new Error(r.status); return {sent:true} });
 }
-function queueLead(lead){
-  try{
-    const q=JSON.parse(localStorage.getItem('pulse.leads')||'[]');
-    q.push(lead); localStorage.setItem('pulse.leads',JSON.stringify(q));
-  }catch(err){}
+function markSent(lead){
+  const q=readLeads();
+  for(let i=q.length-1;i>=0;i--){
+    if(q[i].email===lead.email&&q[i].at===lead.at){q[i].sent=true;break}
+  }
+  writeLeads(q);
 }
 function captureEmail(email,intent){
   const lead={email:email,intent:intent,list:ESP.listId,source:ESP.source,at:new Date().toISOString()};
-  if(!ESP.endpoint){queueLead(lead);return Promise.resolve({queued:true})}
-  return sendLead(lead).catch(function(){ queueLead(lead); return {queued:true} });
+  const q=readLeads(); q.push(lead); writeLeads(q);        /* copy one: this browser */
+  if(!ESP.endpoint)return Promise.resolve({queued:true});
+  return sendLead(lead)                                     /* copy two: the worker */
+    .then(function(r){ markSent(lead); return r })
+    .catch(function(){ return {queued:true} });
 }
-/* Flush anything a previous visit could not deliver. Emptied first, so a second
-   failure re-queues rather than doubling the list. */
+/* Retry whatever never made it, without dropping the local copy. */
 (function flushLeads(){
-  let q=[];
-  try{ q=JSON.parse(localStorage.getItem('pulse.leads')||'[]'); }catch(err){}
-  if(!q.length||!ESP.endpoint)return;
-  try{ localStorage.removeItem('pulse.leads'); }catch(err){}
-  q.forEach(function(l){ sendLead(l).catch(function(){ queueLead(l) }) });
+  if(!ESP.endpoint)return;
+  readLeads().forEach(function(l){
+    if(l.sent)return;
+    sendLead(l).then(function(){ markSent(l) }).catch(function(){});
+  });
 })();
 window.__pulseLeads=function(){
   const q=JSON.parse(localStorage.getItem('pulse.leads')||'[]');
