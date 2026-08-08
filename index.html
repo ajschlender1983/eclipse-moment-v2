@@ -649,6 +649,11 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
    rather than pulling the strip out with 100vw keeps the heading centred, leaves
    the glow behind it untouched, and never overshoots by the scrollbar's width. */
 @media (min-width:701px){
+  /* Share a centre line with the strip. The strip cannot rise to meet the corona
+     without landing on the heading, so the corona drops onto the strip instead:
+     58% is where the strip's centre falls, and it holds from 1024 up because the
+     cards are a fixed 340px there, so the section height stops changing. */
+  .testis::before{top:58%}
   .testis .wrap{width:100%;max-width:none}
   .testis .testi-head{padding:0 4vw}
   .tcar{padding-left:clamp(1rem,4vw,4.5rem);padding-right:clamp(1rem,4vw,4.5rem);scroll-padding-left:clamp(1rem,4vw,4.5rem)}
