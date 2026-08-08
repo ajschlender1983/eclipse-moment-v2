@@ -1,0 +1,8 @@
+name = "eclipse-leads"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "eclipse_leads"
+id = "ae12ac8f947a41f2ab40b42ef916bf11"

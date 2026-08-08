@@ -30,7 +30,16 @@ Order of operations:
 
 1. **Checkout URLs.** Every CTA currently points at `https://www.pulsemindfulness.com/order`. Point them at the real store/checkout destination. The discount code **ECLIPSE75VIP** ($75 off) is shown as tap-to-copy text and is deliberately NOT auto-applied (Johan's call). If checkout can accept a `?discount=` parameter, append it in the CTA URLs.
 2. **EclipseShipping.** The "Pulse at home" card tells buyers to add code `EclipseShipping` at checkout for free 2-day express. Confirm that code exists in Shopify and that the Aug 7 order cutoff is right.
-3. **Email capture (one switch).** All email entry routes through `captureEmail(email, intent)`. At the top of the script block: `const ESP={endpoint:'', listId:'', source:'eclipse-landing'}`. Set `endpoint` to the Klaviyo/Mailchimp/HubSpot subscribe URL and `listId` to the Iceland list and the whole page is wired. Until then, addresses queue in `localStorage['pulse.leads']`; run `copy(window.__pulseLeads())` in the console to pull them as CSV so nothing typed pre-launch is lost.
+3. **Email capture — WIRED, no longer a TODO.** All email entry routes through `captureEmail(email, intent)`, which POSTs to a Cloudflare Worker:
+
+   - Worker: `eclipse-leads` on the `ajschlender@gmail.com` Cloudflare account, source in this repo's sibling scratch dir, endpoint `https://eclipse-leads.ajschlender.workers.dev/lead`.
+   - Storage: Workers KV namespace `eclipse_leads` (`ae12ac8f947a41f2ab40b42ef916bf11`). KV is the record of truth.
+   - Read the list: `GET /leads.csv?key=<EXPORT_TOKEN>` or `/leads.json?key=…`. The token is a Worker secret; ask Adam for it.
+   - One row per person: keyed by address, so repeat submits bump a `submits` counter instead of duplicating. First-seen timestamp is preserved.
+   - KV is eventually consistent, so a new lead can take up to ~60s to appear in the export. That is expected, not a fault.
+   - The browser keeps a **failure buffer** only: if the POST does not get through, the address is held in `localStorage['pulse.leads']` and retried on the next page load. Nothing is stored locally on success.
+
+   To move to a real ESP later, either point `ESP.endpoint` straight at the Klaviyo/Mailchimp/HubSpot subscribe URL, or set a `SHEET_WEBHOOK` secret on the Worker and it will fan out to that URL on every lead. The page does not need to change either way.
 4. **Reserve flow.** "Reserve my ring" on the gate card opens the `#reserve` modal (email capture, intent `reserve-gate`), then hands off to checkout. Same ESP switch covers it.
 5. **Inventory meters.** The card meters are static HTML: `data-left="184" data-total="2000"` (gate) and `data-left="1137" data-total="1500"` (home). Update the numbers when real counts change, or wire them to live inventory if the store can expose it.
 
