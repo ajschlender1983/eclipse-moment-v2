@@ -644,6 +644,17 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 @media (max-width:700px){.tcar-btn{display:none}
   /* a narrow viewport crops deep into the corona, so ease it back */
   .testis::before{opacity:.3}}
+/* On a wide screen the strip runs the full width so it shares the corona's centre
+   line instead of sitting in a 1080px box inside it. Widening this section's wrap
+   rather than pulling the strip out with 100vw keeps the heading centred, leaves
+   the glow behind it untouched, and never overshoots by the scrollbar's width. */
+@media (min-width:701px){
+  .testis .wrap{width:100%;max-width:none}
+  .testis .testi-head{padding:0 4vw}
+  .tcar{padding-left:clamp(1rem,4vw,4.5rem);padding-right:clamp(1rem,4vw,4.5rem);scroll-padding-left:clamp(1rem,4vw,4.5rem)}
+  .tcar-btn.prev{left:clamp(.5rem,1.6vw,1.6rem)}
+  .tcar-btn.next{right:clamp(.5rem,1.6vw,1.6rem)}
+}
 
 /* montage — everyone feeling the pulse together */
 .collage-wrap{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5)}
