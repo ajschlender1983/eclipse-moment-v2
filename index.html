@@ -1900,26 +1900,45 @@ if(fv)new IntersectionObserver(function(e){
 },{rootMargin:'100px'}).observe(fv);
 
 /* ============================ CRM / ESP ==============================
-   TODO (dev owner TBD): set ESP.endpoint to the Klaviyo, Mailchimp or HubSpot
-   subscribe URL and ESP.listId to the Iceland list. Every address on this page
-   goes through captureEmail() so there is one place to wire, not three.
+   Addresses POST to a Cloudflare Worker that writes them to KV, which is the
+   record of truth and is exported to the leads sheet. Every address on the page
+   goes through captureEmail(), so there is one place to wire, not three.
 
-   Until endpoint is set, addresses are queued in localStorage under
-   'pulse.leads' so nothing typed before launch is lost. Run
-   copy(window.__pulseLeads()) in the console to pull them out as CSV. */
-const ESP={endpoint:'', listId:'', source:'eclipse-landing'};
+   When a Klaviyo/Mailchimp/HubSpot list is ready, either point ESP.endpoint
+   straight at it or set SHEET_WEBHOOK on the worker to fan out; nothing here
+   needs to change.
 
-function captureEmail(email,intent){
-  const lead={email:email,intent:intent,list:ESP.listId,source:ESP.source,at:new Date().toISOString()};
+   The local queue is a failure buffer, not a store: an address is only kept in
+   the browser if the POST did not get through, and the next page load retries
+   it. The audience for this page will be on cellular in rural Iceland, so a
+   dropped request is a normal event rather than an edge case. */
+const ESP={endpoint:'https://eclipse-leads.ajschlender.workers.dev/lead', listId:'', source:'eclipse-landing'};
+
+function sendLead(lead){
+  return fetch(ESP.endpoint,{
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(lead)
+  }).then(function(r){ if(!r.ok)throw new Error(r.status); return {sent:true} });
+}
+function queueLead(lead){
   try{
     const q=JSON.parse(localStorage.getItem('pulse.leads')||'[]');
     q.push(lead); localStorage.setItem('pulse.leads',JSON.stringify(q));
   }catch(err){}
-  if(!ESP.endpoint)return Promise.resolve({queued:true});
-  return fetch(ESP.endpoint,{
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(lead)
-  }).catch(function(){ return {queued:true}; });
 }
+function captureEmail(email,intent){
+  const lead={email:email,intent:intent,list:ESP.listId,source:ESP.source,at:new Date().toISOString()};
+  if(!ESP.endpoint){queueLead(lead);return Promise.resolve({queued:true})}
+  return sendLead(lead).catch(function(){ queueLead(lead); return {queued:true} });
+}
+/* Flush anything a previous visit could not deliver. Emptied first, so a second
+   failure re-queues rather than doubling the list. */
+(function flushLeads(){
+  let q=[];
+  try{ q=JSON.parse(localStorage.getItem('pulse.leads')||'[]'); }catch(err){}
+  if(!q.length||!ESP.endpoint)return;
+  try{ localStorage.removeItem('pulse.leads'); }catch(err){}
+  q.forEach(function(l){ sendLead(l).catch(function(){ queueLead(l) }) });
+})();
 window.__pulseLeads=function(){
   const q=JSON.parse(localStorage.getItem('pulse.leads')||'[]');
   return 'email,intent,at\n'+q.map(function(l){return [l.email,l.intent,l.at].join(',')}).join('\n');
