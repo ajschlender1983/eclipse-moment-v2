@@ -568,6 +568,24 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 
 /* the moment — planetary alignment, for whoever is watching */
 /* no bottom padding: the ceremony photograph runs full bleed into the journey */
+/* Phone hero: the copy is laid out around the hand rather than stacked under it.
+   The lockup sits in the sky between the corona and the fingertips, the headline
+   rides above the ring, and the ask sits below it, so the ring keeps its own
+   space in the middle of the frame.
+   The headline size is fluid because it has to hold ONE line: wrapping to two
+   pushes it down onto the ring and closes the gap the whole layout is built on. */
+@media (max-width:700px){
+  .hero-foot{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;margin:0;padding:0;display:block}
+  .hero-foot > *{position:absolute;left:5vw;right:5vw;margin:0}
+  /* width:auto so left AND right both apply. With a width set as well the browser
+     drops `right`, and the block drifts off-centre carrying the gold x with it. */
+  .hero-foot .lockup.co{top:25.5%;width:auto;max-width:600px;margin:0 auto}
+  .hero-foot .hero-kicker{top:35.5%}
+  .hero-foot h1{top:39.5%;font-size:min(2.55rem,9.5vw)}
+  .hero-foot .hero-cta{top:58%}
+  .hero-foot .hero-meter{top:70%;width:auto;max-width:300px;left:0;right:0;margin:0 auto}
+}
+
 /* how it works — the plain mechanism, before any of the poetry */
 .howto{background:var(--volcanic);padding:clamp(3rem,7vw,4.8rem) 0}
 .howto .kicker{text-align:center}
