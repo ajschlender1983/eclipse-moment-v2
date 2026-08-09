@@ -383,9 +383,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 /* This used to sit under the journey and was pulled up over its empty sticky tail.
    It now follows the offer, so the negative pull and the transparent top would
    drag it over the cards. Both are gone. */
-.ring{margin-top:0;position:relative;z-index:1;overflow-x:clip;padding:clamp(3rem,8vw,5.5rem) 0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
-.cycle-stage{position:relative;width:min(92vw,520px);margin:0 auto;aspect-ratio:9/16}
-.cycle-vid-bg{position:absolute;inset:0;overflow:hidden;border-radius:18px}
+.ring{margin-top:0;position:relative;z-index:1;overflow-x:clip;padding:0;background:radial-gradient(90% 70% at 15% 10%, rgba(73,41,145,.28), transparent 65%), radial-gradient(70% 60% at 85% 80%, rgba(244,39,137,.12), transparent 70%), linear-gradient(180deg, #0b0a16 0, var(--midnight) 30vh, #0b0a16 100%);text-align:center}
+.cycle-stage{position:relative;width:100%;margin:0 auto;aspect-ratio:9/16}
+.ring .wrap{width:100%;max-width:none}
+.cycle-vid-bg{position:absolute;inset:0;overflow:hidden}
 .cycle-stage h2{position:absolute;left:50%;top:35%;transform:translate(-50%,-50%);width:94%;z-index:3;font-size:clamp(1.55rem,3.6vw,2.35rem);text-shadow:0 1px 2px rgba(8,7,18,.94),0 0 12px rgba(8,7,18,.86),0 2px 30px rgba(8,7,18,.92)}
 /* the wordmark is the anchor, so the words on either side step back a weight
    and read as one continuous sentence around it */
@@ -417,16 +418,10 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 @keyframes beatGlow{0%,2%{filter:brightness(1.5)}10%,100%{filter:brightness(1)}}
 .beat span{display:block;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--solar);margin-bottom:.35rem;font-weight:700;text-shadow:0 1px 1px rgba(8,7,18,1),0 0 2px rgba(8,7,18,1),0 0 4px rgba(8,7,18,1),0 0 9px rgba(8,7,18,.95),0 0 18px rgba(8,7,18,.8),0 0 34px rgba(8,7,18,.5)}
 .cycle-video{position:absolute;left:0;top:-6%;width:100%;height:112%;object-fit:cover;will-change:transform}
-@media (max-width:700px){
-  .ring{padding-top:0;padding-bottom:0}
-  .ring .wrap{width:100%;max-width:none}
-  .cycle-stage{width:100%}
-  .cycle-vid-bg{border-radius:0}
-}
 /* Desktop gets the widescreen cut, so the stage turns landscape to match it.
    Same breakpoint as the JS that picks the file: change one and change both. */
 @media (min-width:900px){
-  .cycle-stage{width:min(92vw,1040px);aspect-ratio:16/9}
+  .cycle-stage{aspect-ratio:16/9}
   .cycle-stage h2{top:14%}
   .bc-left{left:17%;top:56%}
   .bc-right{left:83%;top:56%}
