@@ -568,6 +568,19 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
 
 /* the moment — planetary alignment, for whoever is watching */
 /* no bottom padding: the ceremony photograph runs full bleed into the journey */
+/* how it works — the plain mechanism, before any of the poetry */
+.howto{background:var(--volcanic);padding:clamp(3rem,7vw,4.8rem) 0}
+.howto .kicker{text-align:center}
+.howto h2{text-align:center;max-width:22ch;margin:0 auto}
+.how-steps{list-style:none;display:grid;gap:clamp(1rem,2.4vw,1.6rem);margin:clamp(2rem,4vw,3rem) auto 0;
+  grid-template-columns:repeat(3,1fr);max-width:1000px}
+.how-step{position:relative;padding:clamp(1.3rem,2.4vw,1.8rem);border-radius:16px;
+  background:rgba(240,246,249,.035);border:1px solid rgba(251,205,102,.16)}
+.how-n{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(251,205,102,.5);color:var(--solar);font-size:.85rem;font-weight:700;margin-bottom:.85rem}
+.how-step b{display:block;font-size:1.12rem;font-weight:700;margin-bottom:.35rem}
+.how-step p{margin:0;color:rgba(240,246,249,.72);font-size:.95rem;line-height:1.5}
+@media (max-width:760px){.how-steps{grid-template-columns:1fr;max-width:420px}}
 .moment{position:relative;overflow:hidden;background:var(--volcanic);padding:clamp(4.5rem,10vw,8rem) 0 0}
 .moment .wrap{position:relative;z-index:2}
 .moment .lead.accent{color:var(--solar);font-size:clamp(1.35rem,2.8vw,1.9rem);font-weight:500;margin-top:1.6rem}
@@ -818,6 +831,36 @@ body.bar-visible{padding-bottom:64px}
   </div>
 </header>
 
+<!-- HOW IT WORKS — Johan's note: the page never said plainly what the ring does.
+     Every claim here is already made elsewhere on the page or in the brand copy.
+     FOR JOHAN TO CONFIRM before this goes live: whether the pulse runs on a
+     schedule the wearer sets, whether a phone is involved at all, and whether
+     "silent" is safe to state. Nothing about battery, sensors or tracking is
+     claimed here on purpose. -->
+<section class="howto" id="howto">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2>The ring vibrates. That is the whole interface.</h2>
+    <ol class="how-steps">
+      <li class="how-step">
+        <span class="how-n" aria-hidden="true">1</span>
+        <b>Wear it</b>
+        <p>A ring you keep on. Nothing to check and nothing to read.</p>
+      </li>
+      <li class="how-step">
+        <span class="how-n" aria-hidden="true">2</span>
+        <b>It pulses</b>
+        <p>A gentle vibration on your finger at the right moment.</p>
+      </li>
+      <li class="how-step">
+        <span class="how-n" aria-hidden="true">3</span>
+        <b>You come back</b>
+        <p>One breath, right where you are. Many times a day.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
 <!-- THE TOTALITY LINE -->
 
 <!-- FOUNDER INVITATION (placeholder thumbnail — video pending) -->
@@ -976,7 +1019,26 @@ body.bar-visible{padding-bottom:64px}
 
 <!-- LIVE BROADCAST -->
 
-<!-- TESTIMONIALS — real wearers, from the Loox reviews -->
+<!-- What the ring actually does, placed before the ask rather than after it -->
+<section class="ring block">
+  <div class="wrap">
+    <div class="cycle-stage">
+      <div class="cycle-vid-bg" aria-hidden="true">
+        <!-- src is chosen in JS from the breakpoint so only one of the two ever
+             downloads: portrait fills a phone, the wide cut suits a desktop frame -->
+        <video class="cycle-video" data-tall="assets/cycle-eclipse.mp4" data-tall-poster="assets/cycle-poster.jpg" data-wide="assets/cycle-pulse.mp4" data-wide-poster="assets/cycle-pulse-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends out ripples"></video>
+      </div>
+      <h2 class="cycle-title"><span class="ct-lead">One</span><img class="ct-logo" src="assets/pulse-logo-solid.svg" alt="pulse" width="391" height="157" decoding="async"><span class="ct-lead">brings you back.</span></h2>
+      <div class="cycle-cards">
+        <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration at the perfect time.</div></div>
+        <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
+        <div class="beat-card bc-bottom"><div class="beat cb3"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5L9 6.5l4 11 2.5-5.5H21"/></svg><span>Practice</span>Becoming Present.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
 <section class="offer block" id="offer">
   <div class="wrap">
     <h2>Two ways to get your ring</h2>
@@ -1019,22 +1081,6 @@ body.bar-visible{padding-bottom:64px}
       </div>
     </div>
     <!-- TODO (dev owner TBD): wire the two card meters to the live inventory count -->
-  </div>
-</section><section class="ring block">
-  <div class="wrap">
-    <div class="cycle-stage">
-      <div class="cycle-vid-bg" aria-hidden="true">
-        <!-- src is chosen in JS from the breakpoint so only one of the two ever
-             downloads: portrait fills a phone, the wide cut suits a desktop frame -->
-        <video class="cycle-video" data-tall="assets/cycle-eclipse.mp4" data-tall-poster="assets/cycle-poster.jpg" data-wide="assets/cycle-pulse.mp4" data-wide-poster="assets/cycle-pulse-poster.jpg" autoplay muted loop playsinline preload="none" aria-label="A total eclipse blazing over dark mountains while a gold ring sends out ripples"></video>
-      </div>
-      <h2 class="cycle-title"><span class="ct-lead">One</span><img class="ct-logo" src="assets/pulse-logo-solid.svg" alt="pulse" width="391" height="157" decoding="async"><span class="ct-lead">brings you back.</span></h2>
-      <div class="cycle-cards">
-        <div class="beat-card bc-left"><div class="beat cb1"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="9.5" opacity=".45"/></svg><span>Pulse</span>A gentle vibration at the perfect time.</div></div>
-        <div class="beat-card bc-right"><div class="beat cb2"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M9.5 7.5v9M14.5 7.5v9"/></svg><span>Pause</span>One breath, right where you are.</div></div>
-        <div class="beat-card bc-bottom"><div class="beat cb3"><svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5L9 6.5l4 11 2.5-5.5H21"/></svg><span>Practice</span>Becoming Present.</div></div>
-      </div>
-    </div>
   </div>
 </section>
 
