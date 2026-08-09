@@ -39,7 +39,21 @@ Order of operations:
    - KV is eventually consistent, so a new lead can take up to ~60s to appear in the export. That is expected, not a fault.
    - The browser keeps a **failure buffer** only: if the POST does not get through, the address is held in `localStorage['pulse.leads']` and retried on the next page load. Nothing is stored locally on success.
 
-   To move to a real ESP later, either point `ESP.endpoint` straight at the Klaviyo/Mailchimp/HubSpot subscribe URL, or set a `SHEET_WEBHOOK` secret on the Worker and it will fan out to that URL on every lead. The page does not need to change either way.
+   Every lead is written in three places:
+
+   | Copy | Where | Lag | Notes |
+   |---|---|---|---|
+   | 1 | The visitor's browser (`localStorage['pulse.leads']`) | instant | Retry buffer. Capped at 200. Not readable by us. |
+   | 2 | Cloudflare KV (`eclipse_leads`) | ~seconds | The record of truth. |
+   | 3 | Google Sheet, **Live** tab | ~10–20s | Via Apps Script web app, `SHEET_WEBHOOK` secret on the Worker. |
+
+   The same sheet's first tab holds an `=IMPORTDATA(...)` formula pointing at `/leads.csv`, giving an independent hourly mirror straight from Cloudflare. Sheet: `1Y_XFe9tx2hvY6GWGjkgCvdamLFovNv69k88AA-llFiE`. Apps Script source is in `_lead-worker/AppsScript.gs`; it authenticates with the `SHEET_SECRET` shared secret because an Apps Script web app must accept anonymous POSTs to be reachable at all.
+
+   The push to Google happens inside `ctx.waitUntil` **after** KV has accepted the row, so Google being slow or mid-redeploy can never fail a visitor's reservation or lose a lead.
+
+   To move to a real ESP later, either point `ESP.endpoint` straight at the Klaviyo/Mailchimp/HubSpot subscribe URL, or repoint `SHEET_WEBHOOK`. The page does not need to change either way.
+
+   **Security note:** `/leads.csv?key=…` is publicly reachable by anyone holding the export token, and that token is visible in the sheet's IMPORTDATA formula. Anyone the sheet is shared with can therefore pull the whole list. Rotate the token (`wrangler secret put EXPORT_TOKEN`) and update the formula if the sheet is ever shared beyond the core team.
 4. **Reserve flow.** "Reserve my ring" on the gate card opens the `#reserve` modal (email capture, intent `reserve-gate`), then hands off to checkout. Same ESP switch covers it.
 5. **Inventory meters.** The card meters are static HTML: `data-left="184" data-total="2000"` (gate) and `data-left="1137" data-total="1500"` (home). Update the numbers when real counts change, or wire them to live inventory if the store can expose it.
 

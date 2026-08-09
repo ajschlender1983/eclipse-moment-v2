@@ -85,14 +85,24 @@ export default {
       }
       await env.eclipse_leads.put(key, JSON.stringify(lead));
 
+      /* Pushed to the sheet after KV has already accepted the row, and inside
+         waitUntil, so the visitor never waits on Google and never sees an error
+         if Apps Script is slow or redeploying. KV remains the record either way.
+         The secret travels in the body because an Apps Script web app has to be
+         open to anonymous POSTs to be reachable at all. */
       if (env.SHEET_WEBHOOK) {
         ctx.waitUntil(
           fetch(env.SHEET_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(lead),
-          }).catch(() => {})
+            body: JSON.stringify({ ...lead, secret: env.SHEET_SECRET || '' }),
+            redirect: 'follow',
+          })
+            .then(r => r.text().then(t => console.log('sheet', r.status, t.slice(0, 200))))
+            .catch(e => console.log('sheet ERROR', String(e)))
         );
+      } else {
+        console.log('sheet SKIPPED: no SHEET_WEBHOOK bound');
       }
       return json({ ok: true, queued: false }, 200, origin);
     }
