@@ -104,6 +104,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;overflow:hidden}
 .hero video,.hero .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 59%;z-index:-2}
+/* the desktop cut is the reaching-hand landscape; keep its object-position in
+   step with POS_Y in the ripple-anchor JS, they mirror the same crop math */
+@media (min-width:900px){.hero .hero-bg{object-position:center 40%}}
 /* A ripple leaving the ring in the photograph. Anchored by JS, because
    object-fit:cover re-crops per viewport and the ring moves with it. Sized off
    the ring's own width so it stays proportionate. Sits above the image and below
@@ -574,7 +577,7 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
    space in the middle of the frame.
    The headline size is fluid because it has to hold ONE line: wrapping to two
    pushes it down onto the ring and closes the gap the whole layout is built on. */
-@media (max-width:700px){
+@media (max-width:899px){
   .hero-foot{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;margin:0;padding:0;display:block}
   .hero-foot > *{position:absolute;left:5vw;right:5vw;margin:0}
   /* width:auto so left AND right both apply. With a width set as well the browser
@@ -584,6 +587,19 @@ h2{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:700;letter-spacing:-.015em;lin
   .hero-foot h1{top:39.5%;font-size:min(2.55rem,9.5vw)}
   .hero-foot .hero-cta{top:58%}
   .hero-foot .hero-meter{top:70%;width:auto;max-width:300px;left:0;right:0;margin:0 auto}
+}
+
+/* Same composition on the wide crop. The landscape frame puts the corona higher
+   and the ring lower than the portrait one, so the stops differ from the phone's
+   even though the arrangement is identical. */
+@media (min-width:900px){
+  .hero-foot{position:absolute;left:0;right:0;top:0;bottom:0;width:100%;margin:0;padding:0;display:block}
+  .hero-foot > *{position:absolute;left:6vw;right:6vw;margin:0}
+  .hero-foot .lockup.co{top:23.5%;width:auto;max-width:600px;margin:0 auto}
+  .hero-foot .hero-kicker{top:33.5%}
+  .hero-foot h1{top:36.5%}
+  .hero-foot .hero-cta{top:56%}
+  .hero-foot .hero-meter{top:66.5%;width:auto;max-width:340px;left:0;right:0;margin:0 auto}
 }
 
 /* how it works — the plain mechanism, before any of the poetry */
@@ -814,7 +830,14 @@ body.bar-visible{padding-bottom:64px}
 
 <!-- HERO -->
 <header class="hero" id="top">
-  <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="1116" height="2000">
+  <!-- Two crops of the same moment. <picture> lets the browser pick before it
+       fetches, so a phone never downloads the wide file and a desktop never
+       downloads the tall one. The 900px breakpoint here is the same one the
+       ripple-anchor constants switch on; move one and you must move the other. -->
+  <picture>
+    <source media="(min-width:900px)" srcset="assets/hero-reach.jpg" width="1872" height="1056">
+    <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="1116" height="2000">
+  </picture>
   <span class="hero-pulse" aria-hidden="true"><i></i><i></i><i></i></span>
   <div class="hero-foot">
     <div class="lockup co" role="img" aria-label="Unify and Pulse. Unify: Massive Global Movement. Pulse: World's First Awareness Ring.">
@@ -1911,11 +1934,17 @@ if('IntersectionObserver' in window){
   if(!hero||!img)return;
   /* BAND_BIAS: 0 sits on the eclipse's lower edge, 1 on the fingertips. The
      midpoint floated the block too low, so it now rides high in that gap. */
-  const POS_Y=0.59;
-  /* the ring, measured off autopilot-hand.jpg: centre and width as fractions */
-  const RING_X=0.6285, RING_Y=0.5202, RING_W=0.158;
+  /* two cuts, one anchor: constants per image, picked off the same 900px
+     breakpoint as the <source> media. Measured centre/width as fractions. */
+  const CUTS={
+    tall:{POS_Y:0.59, RING_X:0.6285, RING_Y:0.5202, RING_W:0.158},   /* autopilot-hand.jpg */
+    wide:{POS_Y:0.40, RING_X:0.530,  RING_Y:0.515,  RING_W:0.042}    /* hero-reach.jpg */
+  };
+  const heroMQ=matchMedia('(min-width:900px)');
   const pulse=document.querySelector('.hero-pulse');
   function place(){
+    const C=heroMQ.matches?CUTS.wide:CUTS.tall;
+    const POS_Y=C.POS_Y, RING_X=C.RING_X, RING_Y=C.RING_Y, RING_W=C.RING_W;
     const iw=img.naturalWidth, ih=img.naturalHeight;
     if(!iw||!ih)return;
     const bw=hero.clientWidth, bh=hero.clientHeight;
@@ -1929,6 +1958,8 @@ if('IntersectionObserver' in window){
     }
   }
   if(img.complete)place(); else img.addEventListener('load',place);
+  img.addEventListener('load',place);
+  heroMQ.addEventListener('change',function(){requestAnimationFrame(place)});
   addEventListener('resize',place);
   addEventListener('orientationchange',place);
 })();
