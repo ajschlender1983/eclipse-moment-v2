@@ -1983,7 +1983,14 @@ if(fv)new IntersectionObserver(function(e){
    Worth being clear about the limit of the browser copy: it lives in that one
    visitor's browser, so it protects their submission through a retry. It is not
    somewhere the list can be read from. The worker is the record. */
-const ESP={endpoint:'https://eclipse-leads.ajschlender.workers.dev/lead', listId:'', source:'eclipse-landing'};
+/* Same-origin first, the worker second. Posting straight to a *.workers.dev
+   address is a third-party request, and content blockers, Safari's tracking
+   protection and corporate networks drop those without a word. The visitor sees
+   the same thank-you either way, so a blocked send is invisible to everyone.
+   /api/lead is a Pages Function that forwards to the worker; on GitHub Pages it
+   does not exist, so that host falls through to the direct call. */
+const ESP={endpoints:['/api/lead','https://eclipse-leads.ajschlender.workers.dev/lead'],
+           endpoint:'/api/lead', listId:'', source:'eclipse-landing'};
 const LEAD_CAP=200;   /* someone else's address should not live in a stranger's browser forever */
 
 function readLeads(){
@@ -1992,10 +1999,16 @@ function readLeads(){
 function writeLeads(q){
   try{ localStorage.setItem('pulse.leads',JSON.stringify(q.slice(-LEAD_CAP))) }catch(err){}
 }
-function sendLead(lead){
-  return fetch(ESP.endpoint,{
+function sendLead(lead,i){
+  const list=ESP.endpoints||[ESP.endpoint];
+  const n=i||0;
+  if(n>=list.length)return Promise.reject(new Error('no route'));
+  return fetch(list[n],{
     method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(lead)
-  }).then(function(r){ if(!r.ok)throw new Error(r.status); return {sent:true} });
+  })
+  .then(function(r){ if(!r.ok)throw new Error(r.status); return {sent:true} })
+  /* A blocked or missing route is not a lost lead: try the next one. */
+  .catch(function(e){ if(n+1<list.length)return sendLead(lead,n+1); throw e });
 }
 function markSent(lead){
   const q=readLeads();
