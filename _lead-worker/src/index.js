@@ -11,14 +11,24 @@
  */
 
 const ALLOWED_ORIGINS = [
+  'https://eclipse.pulsemindfulness.com',   /* the live campaign domain */
   'https://eclipse-moment.pages.dev',
   'https://ajschlender1983.github.io',
   'https://www.pulsemindfulness.com',
   'https://pulsemindfulness.com',
 ];
 
+/* Any pulsemindfulness.com host and any Pages preview are allowed, so moving the
+   campaign to a new subdomain never silently breaks capture. Echoing back a
+   mismatched origin is worse than refusing: the browser drops the response, the
+   visitor still sees the thank-you, and the address disappears with no error. */
 function cors(origin) {
-  const ok = origin && ALLOWED_ORIGINS.some(o => origin === o || origin.endsWith('.eclipse-moment.pages.dev'));
+  const ok = origin && (
+    ALLOWED_ORIGINS.includes(origin) ||
+    origin.endsWith('.eclipse-moment.pages.dev') ||
+    origin.endsWith('.eclipse-owners.pages.dev') ||
+    origin.endsWith('.pulsemindfulness.com')
+  );
   return {
     'Access-Control-Allow-Origin': ok ? origin : ALLOWED_ORIGINS[0],
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
