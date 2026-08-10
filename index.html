@@ -819,8 +819,8 @@ body.bar-visible{padding-bottom:64px}
        downloads the tall one. The 900px breakpoint here is the same one the
        ripple-anchor constants switch on; move one and you must move the other. -->
   <picture>
-    <source media="(min-width:900px)" srcset="assets/hero-reach.jpg" width="1670" height="942">
-    <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="862" height="1825">
+    <source media="(min-width:900px)" srcset="assets/hero-reach.jpg" width="1872" height="1056">
+    <img decoding="async" class="hero-bg" src="assets/autopilot-hand.jpg" alt="" fetchpriority="high" width="1116" height="2000">
   </picture>
   <span class="hero-pulse" aria-hidden="true"><i></i><i></i><i></i></span>
   <div class="hero-foot">
@@ -1899,8 +1899,8 @@ if('IntersectionObserver' in window){
   /* two cuts, one anchor: constants per image, picked off the same 900px
      breakpoint as the <source> media. Measured centre/width as fractions. */
   const CUTS={
-    tall:{POS_Y:0.59, RING_X:0.5739, RING_Y:0.5207, RING_W:0.138},   /* autopilot-hand.jpg */
-    wide:{POS_Y:0.40, RING_X:0.5345, RING_Y:0.4922, RING_W:0.038}    /* hero-reach.jpg */
+    tall:{POS_Y:0.59, RING_X:0.6285, RING_Y:0.5202, RING_W:0.158},   /* autopilot-hand.jpg */
+    wide:{POS_Y:0.40, RING_X:0.530,  RING_Y:0.515,  RING_W:0.042}    /* hero-reach.jpg */
   };
   const heroMQ=matchMedia('(min-width:900px)');
   const pulse=document.querySelector('.hero-pulse');
